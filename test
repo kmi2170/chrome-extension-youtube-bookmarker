@@ -1,0 +1,239 @@
+
+> youtube-bookmarker-react-ts@1.0.0 dev
+> webpack --stats verbose
+
+PublicPath: auto
+asset popup.js 90.3 KiB {popup} [emitted] (name: popup)
+  sourceMap popup.js.map 105 KiB ({popup}) [emitted] [dev] (auxiliary name: popup)
+asset popup.html 248 bytes [emitted]
+asset manifest.json 245 bytes [emitted] [from: public/manifest.json] [copied]
+Entrypoint popup 90.3 KiB (105 KiB) = popup.js 1 auxiliary asset
+chunk {popup} (runtime: popup) popup.js (popup) 85.9 KiB (javascript) 1.04 KiB (runtime) [entry] [rendered]
+  > ./src/App.tsx popup
+  runtime modules 1.04 KiB
+    webpack/runtime/compat get default export 267 bytes {popup} [code generated]
+      [no exports]
+      [used exports unknown]
+    webpack/runtime/define property getters 308 bytes {popup} [code generated]
+      [no exports]
+      [used exports unknown]
+    webpack/runtime/hasOwnProperty shorthand 88 bytes {popup} [code generated]
+      [no exports]
+      [used exports unknown]
+    webpack/runtime/make namespace object 274 bytes {popup} [code generated]
+      [no exports]
+      [used exports unknown]
+    webpack/runtime/node module decorator 123 bytes {popup} [code generated]
+      [no exports]
+      [used exports unknown]
+  cacheable modules 85.9 KiB
+    ./node_modules/react/cjs/react.development.js 85.5 KiB {popup} [depth 2] [dependent] [built] [code generated]
+      [used exports unknown]
+      module decorator [./node_modules/react/cjs/react.development.js] 2459:24-30
+      module decorator [./node_modules/react/cjs/react.development.js] 2459:34-40
+      module decorator [./node_modules/react/cjs/react.development.js] 2462:41-47
+      cjs export require ./cjs/react.development.js [./node_modules/react/index.js] 6:2-56
+    ./node_modules/react/index.js 190 bytes {popup} [depth 1] [dependent] [built] [code generated]
+      [used exports unknown]
+      harmony side effect evaluation react [./src/App.tsx] 1:0-26
+      harmony import specifier react [./src/App.tsx] 4:22-41
+    ./src/App.tsx 166 bytes {popup} [depth 0] [built] [code generated]
+      [exports: default]
+      [used exports unknown]
+      entry ./src/App.tsx popup
+  PublicPath: (none)
+  Entrypoint HtmlWebpackPlugin_0-0 =
+  chunk {HtmlWebpackPlugin_0-0} (runtime: HtmlWebpackPlugin_0-0) (HtmlWebpackPlugin_0-0) 591 bytes (javascript) 734 bytes (runtime) [entry] [rendered]
+    > /home/kemmei/Documents/Projects/MyProjects/chrome-extentions/youtube-bookmarker-react-ts/node_modules/html-webpack-plugin/lib/loader.js!/home/kemmei/Documents/Projects/MyProjects/chrome-extentions/youtube-bookmarker-react-ts/src/index.html HtmlWebpackPlugin_0-0
+    > data:text/javascript,__webpack_public_path__ = __webpack_base_uri__ = htmlWebpackPluginPublicPath; HtmlWebpackPlugin_0-0
+    runtime modules 734 bytes
+      webpack/runtime/hasOwnProperty shorthand 88 bytes {HtmlWebpackPlugin_0-0} [code generated]
+        [no exports]
+        [used exports unknown]
+      webpack/runtime/make namespace object 274 bytes {HtmlWebpackPlugin_0-0} [code generated]
+        [no exports]
+        [used exports unknown]
+      webpack/runtime/publicPath 27 bytes {HtmlWebpackPlugin_0-0} [code generated]
+        [no exports]
+        [used exports unknown]
+      webpack/runtime/require chunk loading 345 bytes {HtmlWebpackPlugin_0-0} [code generated]
+        [no exports]
+        [used exports unknown]
+    cacheable modules 591 bytes
+      ./node_modules/html-webpack-plugin/lib/loader.js!./src/index.html 514 bytes {HtmlWebpackPlugin_0-0} [depth 0] [built] [code generated]
+        [used exports unknown]
+        CommonJS bailout: module.exports is used directly at 1:154-168
+        cjs self exports reference [./node_modules/html-webpack-plugin/lib/loader.js!./src/index.html] 1:154-168
+        entry /home/kemmei/Documents/Projects/MyProjects/chrome-extentions/youtube-bookmarker-react-ts/node_modules/html-webpack-plugin/lib/loader.js!/home/kemmei/Documents/Projects/MyProjects/chrome-extentions/youtube-bookmarker-react-ts/src/index.html HtmlWebpackPlugin_0-0
+        used as library export
+      data:text/javascript,__webpack_public.. 77 bytes {HtmlWebpackPlugin_0-0} [depth 0] [built] [code generated]
+        [no exports]
+        [used exports unknown]
+        entry data:text/javascript,__webpack_public.. HtmlWebpackPlugin_0-0
+    
+
+  LOG from webpack.Compiler
+  <t> make hook: 37.5002 ms
+  <t> finish make hook: 0.076845 ms
+  <t> finish compilation: 1.944959 ms
+  <t> seal compilation: 17.090506 ms
+  <t> afterCompile hook: 0.033473 ms
+
+  LOG from webpack.Compilation
+  <t> compute affected modules: 0.230102 ms
+  <t> finish modules: 1.325327 ms
+  <t> report dependency errors and warnings: 0.064301 ms
+  <t> optimize dependencies: 0.20249 ms
+  <t> create chunks: 1.676987 ms
+  <t> compute affected modules with chunk graph: 0.082215 ms
+  <t> optimize: 1.413482 ms
+      2 modules hashed, 0 from cache (1 variants per module in average)
+  <t> module hashing: 1.016266 ms
+      100% code generated (2 generated, 0 from cache)
+  <t> code generation: 1.640609 ms
+  <t> runtime requirements.modules: 0.188224 ms
+  <t> runtime requirements.chunks: 0.32018 ms
+  <t> runtime requirements.entries: 1.010797 ms
+  <t> runtime requirements: 1.70042 ms
+  <t> hashing: initialize hash: 0.007574 ms
+  <t> hashing: sort chunks: 0.050395 ms
+  <t> hashing: hash runtime modules: 1.301321 ms
+  <t> hashing: hash chunks: 1.509983 ms
+  <t> hashing: hash digest: 0.0428 ms
+  <t> hashing: process full hash modules: 0.001513 ms
+  <t> hashing: 3.243856 ms
+      100% code generated (4 generated, 0 from cache)
+  <t> record hash: 0.034033 ms
+  <t> module assets: 0.094517 ms
+  <t> create chunk assets: 4.393213 ms
+  <t> process assets: 0.6238 ms
+
+  LOG from webpack.FlagDependencyExportsPlugin
+  <t> restore cached provided exports: 0.357641 ms
+  <t> figure out provided exports: 0.074489 ms
+      50% of exports of modules have been determined (1 no declared exports, 1 not cached, 0 flagged uncacheable, 0 from cache, 0 from mem cache, 0 additional calculations due to dependencies)
+  <t> store provided exports into cache: 0.19198 ms
+
+  LOG from webpack.SideEffectsFlagPlugin
+  <t> update dependencies: 0.049273 ms
+
+  LOG from webpack.buildChunkGraph
+  <t> visitModules: prepare: 0.156544 ms
+  <t> visitModules: visiting: 0.455825 ms
+      4 queue items processed (2 blocks)
+      0 chunk groups connected
+      0 chunk groups processed for merging (0 module sets, 0 forked, 0 + 0 modules forked, 0 + 0 modules merged into fork, 0 resulting modules)
+      0 chunk group info updated (0 already connected chunk groups reconnected)
+  <t> visitModules: 0.977714 ms
+  <t> connectChunkGroups: 0.050985 ms
+  <t> cleanup: 0.022883 ms
+
+  LOG from webpack.FileSystemInfo
+      2 new snapshots created
+      0% root snapshot uncached (0 / 0)
+      0% children snapshot uncached (0 / 0)
+      0 entries tested
+      File info in cache: 1 timestamps 0 hashes 0 timestamp hash combinations
+      File timestamp snapshot optimization: 0% (0/1) entries shared via 0 shared snapshots (0 times referenced)
+      Directory info in cache: 0 timestamps 0 hashes 0 timestamp hash combinations
+      Managed items info in cache: 0 items
+
+  Child HtmlWebpackCompiler compiled successfully (8035a2aefd10430108d8)
+
+LOG from webpack.Compiler
+<t> make hook: 406.421307 ms
+<t> finish make hook: 0.012734 ms
+<t> finish compilation: 1.017018 ms
+<t> seal compilation: 41.052206 ms
+<t> afterCompile hook: 0.011011 ms
+<t> emitAssets: 9.059678 ms
+<t> emitRecords: 0.041829 ms
+<t> done hook: 0.095789 ms
+<t> beginIdle: 0.014717 ms
+
+LOG from webpack.Compilation
+<t> compute affected modules: 0.001644 ms
+<t> finish modules: 0.686287 ms
+<t> report dependency errors and warnings: 0.311595 ms
+<t> optimize dependencies: 0.050385 ms
+<t> create chunks: 0.270688 ms
+<t> compute affected modules with chunk graph: 0.002014 ms
+<t> optimize: 1.613497 ms
+    3 modules hashed, 0 from cache (1 variants per module in average)
+<t> module hashing: 0.338736 ms
+    100% code generated (3 generated, 0 from cache)
+<t> code generation: 2.420342 ms
+<t> runtime requirements.modules: 0.127019 ms
+<t> runtime requirements.chunks: 0.105098 ms
+<t> runtime requirements.entries: 0.537469 ms
+<t> runtime requirements: 0.798137 ms
+<t> hashing: initialize hash: 0.003055 ms
+<t> hashing: hash child compilations: 0.003737 ms
+<t> hashing: sort chunks: 0.01626 ms
+<t> hashing: hash runtime modules: 0.383329 ms
+<t> hashing: hash chunks: 0.517501 ms
+<t> hashing: hash digest: 0.034324 ms
+<t> hashing: process full hash modules: 0.001723 ms
+<t> hashing: 0.991781 ms
+    100% code generated (5 generated, 0 from cache)
+<t> record hash: 0.027181 ms
+<t> module assets: 0.011542 ms
+<t> create chunk assets: 0.596068 ms
+<t> process assets: 33.580707 ms
+
+LOG from webpack.ResolverCachePlugin
+    100% really resolved (6 real resolves with 0 cached but invalid, 0 cached valid, 0 concurrent)
+
+LOG from webpack.FlagDependencyExportsPlugin
+<t> restore cached provided exports: 0.029265 ms
+<t> figure out provided exports: 0.519605 ms
+    67% of exports of modules have been determined (1 no declared exports, 2 not cached, 0 flagged uncacheable, 0 from cache, 0 from mem cache, 0 additional calculations due to dependencies)
+<t> store provided exports into cache: 0.019116 ms
+
+LOG from webpack.SideEffectsFlagPlugin
+<t> update dependencies: 0.003496 ms
+
+LOG from webpack.buildChunkGraph
+<t> visitModules: prepare: 0.039234 ms
+<t> visitModules: visiting: 0.099998 ms
+    6 queue items processed (3 blocks)
+    0 chunk groups connected
+    0 chunk groups processed for merging (0 module sets, 0 forked, 0 + 0 modules forked, 0 + 0 modules merged into fork, 0 resulting modules)
+    0 chunk group info updated (0 already connected chunk groups reconnected)
+<t> visitModules: 0.163717 ms
+<t> connectChunkGroups: 0.001263 ms
+<t> cleanup: 0.000902 ms
+
+LOG from webpack.SplitChunksPlugin
+<t> prepare: 0.018274 ms
+<t> modules: 0.529334 ms
+<t> queue: 0.001724 ms
+<t> maxSize: 0.003797 ms
+
+LOG from copy-webpack-plugin
+    starting to add additional assets...
+    starting to process a pattern from 'public' using '/home/kemmei/Documents/Projects/MyProjects/chrome-extentions/youtube-bookmarker-react-ts' context
+    begin globbing '/home/kemmei/Documents/Projects/MyProjects/chrome-extentions/youtube-bookmarker-react-ts/public/**/*'...
+    'to' option '.' determinated as 'dir'
+    determined that '/home/kemmei/Documents/Projects/MyProjects/chrome-extentions/youtube-bookmarker-react-ts/public/manifest.json' should write to 'manifest.json'
+    finished to process a pattern from 'public' using '/home/kemmei/Documents/Projects/MyProjects/chrome-extentions/youtube-bookmarker-react-ts/public' context
+    writing 'manifest.json' from '/home/kemmei/Documents/Projects/MyProjects/chrome-extentions/youtube-bookmarker-react-ts/public/manifest.json' to compilation assets...
+    written 'manifest.json' from '/home/kemmei/Documents/Projects/MyProjects/chrome-extentions/youtube-bookmarker-react-ts/public/manifest.json' to compilation assets
+    finished to adding additional assets
++ 13 hidden lines
+
+LOG from webpack.FileSystemInfo
+    11 new snapshots created
+    0% root snapshot uncached (0 / 0)
+    0% children snapshot uncached (0 / 0)
+    0 entries tested
+    File info in cache: 28 timestamps 0 hashes 0 timestamp hash combinations
+    File timestamp snapshot optimization: 77% (58/75) entries shared via 3 shared snapshots (4 times referenced)
+    Directory info in cache: 0 timestamps 0 hashes 0 timestamp hash combinations
+    Missing items snapshot optimization: 90% (26/29) entries shared via 1 shared snapshots (1 times referenced)
+    Managed items info in cache: 8 items
+    Managed items snapshot optimization: 0% (0/13) entries shared via 0 shared snapshots (0 times referenced)
+    Managed files snapshot optimization: 35% (8/23) entries shared via 1 shared snapshots (1 times referenced)
+    Managed missing snapshot optimization: 0% (0/12) entries shared via 0 shared snapshots (0 times referenced)
+
+2022-07-14 10:21:29: webpack 5.73.0 compiled successfully in 471 ms (9351e1d028b7b9707f55)
