@@ -55,14 +55,10 @@ const rules = [
       },
     ],
   },
-  // {
-  //   test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
-  //   type: 'asset/resource',
-  // },
-  // {
-  //   test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
-  //   type: 'asset/inline',
-  // },
+  {
+    test: /\.(png|svg|jpg|jpeg|gif)$/i,
+    type: 'asset/resource',
+  },
 ];
 
 module.exports = {
@@ -83,4 +79,9 @@ module.exports = {
     rules,
   },
   plugins,
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
 };
