@@ -4,9 +4,13 @@
   "version": "1.0.0",
   "manifest_version": 3,
   "action": {
-    "default_popup": "./popup.html",
+    "default_popup": "popup.html",
     "default_title": "youtube timestamp bookmarker",
     "default_icon": "icon-add-bookmark-48.png"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
   },
   "icons": {
     "48": "icon-add-bookmark-48.png",
