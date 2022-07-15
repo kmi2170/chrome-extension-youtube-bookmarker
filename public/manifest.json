@@ -5,6 +5,13 @@
   "manifest_version": 3,
   "action": {
     "default_popup": "./popup.html",
-    "default_title": "youtube timestamp bookmarker"
+    "default_title": "youtube timestamp bookmarker",
+    "default_icon": "icon-add-bookmark-48.png"
+  },
+  "icons": {
+    "48": "icon-add-bookmark-48.png",
+    "96": "icon-add-bookmark-96.png",
+    "144": "icon-add-bookmark-144.png",
+    "240": "icon-add-bookmark-240.png"
   }
 }

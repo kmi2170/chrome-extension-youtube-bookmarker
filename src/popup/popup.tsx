@@ -1,10 +1,10 @@
 import React from 'react';
-import './index.css';
+import './popup.css';
 
-const App = () => {
+const Popup = () => {
   return (
     <>
-      <h1>Youtube Timestamp Bookmarker</h1>
+      <h1 className="text-3xl text-green-500">Youtube Timestamp Bookmarker</h1>
       <h3>Video title</h3>
       <div>timestamp</div>
       <div>timestamp</div>
@@ -13,4 +13,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Popup;
