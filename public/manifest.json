@@ -12,6 +12,11 @@
   "background": {
     "service_worker": "background.js"
   },
+  "permissions": [
+    "tabs",
+    "bookmarks",
+    "unlimitedStorage"
+  ],
   "icons": {
     "48": "icon-add-bookmark-48.png",
     "96": "icon-add-bookmark-96.png",

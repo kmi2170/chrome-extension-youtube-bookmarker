@@ -67,6 +67,7 @@ module.exports = {
   entry: {
     popup: resolve('./src/popup/index.tsx'),
     options: resolve('./src/options/index.tsx'),
+    background: resolve('./src/background/background.ts'),
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
