@@ -6,7 +6,7 @@
   "action": {
     "default_popup": "popup.html",
     "default_title": "youtube timestamp bookmarker",
-    "default_icon": "assets/imagesicon-add-bookmark-144.png"
+    "default_icon": "assets/icon-add-bookmark-144.png"
   },
   "content_scripts": [
     {

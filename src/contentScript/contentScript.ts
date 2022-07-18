@@ -17,12 +17,9 @@ const bookmarkBtnStyle = {
 
   const fetchBookmarks: () => Promise<VideoBookmark[]> = () => {
     return new Promise((resolve) => {
-      console.log({ currentVideo });
-      if (currentVideo)
-        chrome.storage.sync.get([currentVideo], (obj) => {
-          console.log('fetchBookmarks');
-          resolve(obj[currentVideo] ? JSON.parse(obj[currentVideo]) : []);
-        });
+      chrome.storage.sync.get([currentVideo], (obj) => {
+        resolve(obj[currentVideo] ? JSON.parse(obj[currentVideo]) : []);
+      });
     });
   };
 
@@ -41,7 +38,8 @@ const bookmarkBtnStyle = {
         'assets/icon-add-bookmark-144.png'
       );
       bookmarkBtn.className = 'ytp-button ' + 'bookmark-btn';
-      bookmarkBtn.title = 'Click to bookmark current timestamp';
+      bookmarkBtn.title = 'Click to save current timestamp';
+      css(bookmarkBtn, bookmarkBtnStyle);
 
       console.log(youtubeLeftControls);
       youtubeLeftControls =

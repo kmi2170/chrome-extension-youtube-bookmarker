@@ -1,14 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getActiveTabURL } from '../chrome-tabs';
 import './popup.css';
 
 const Popup = () => {
+  const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
+  const [currentVideoTitle, setCurrentVideoTitle] = useState('');
+  const [currentVideoBookmarks, setCurrentVideoBookmarks] = useState<string[]>(
+    []
+  );
+
+  const getCurrentVideoInfo = async () => {
+    const activeTab = await getActiveTabURL();
+    console.log(activeTab);
+    const queryParameters = activeTab.url?.split('?')[1];
+    const urlParameters = new URLSearchParams(queryParameters);
+    const videoId = urlParameters.get('v');
+
+    if (activeTab.url?.includes('youtube.com/watch') && videoId) {
+      setCurrentVideoTitle(activeTab.title as string);
+      setCurrentVideoId(videoId);
+      chrome.storage.sync.get([videoId], (data) => {
+        const videoBookmarks = data[videoId] ? JSON.parse(data[videoId]) : [];
+        setCurrentVideoBookmarks(videoBookmarks);
+      });
+    }
+  };
+
+  // const messageListener = (obj, sende, response) => {
+  //   console.log(obj);
+  //   const { type, value, videoId } = obj;
+  //   setState(videoId);
+  // };
+
+  useEffect(() => {
+    getCurrentVideoInfo();
+    // chrome.runtime.onMessage.addListener(messageListener);
+    // return () => {
+    //   chrome.runtime.onMessage.removeListener(messageListener);
+    // };
+  }, []);
+
   return (
     <>
       <h1 className="text-3xl text-green-500">Youtube Timestamp Bookmarker</h1>
-      <h3>Video title</h3>
-      <div>timestamp</div>
-      <div>timestamp</div>
-      <div>timestamp</div>
+      <h3>{currentVideoTitle}</h3>
+      <h4>{currentVideoId}</h4>
+      {currentVideoBookmarks?.length > 0 ? (
+        currentVideoBookmarks.map((bookmark) => {
+          <div>{bookmark}</div>;
+        })
+      ) : (
+        <i>No Bookmarks to Show</i>
+      )}
     </>
   );
 };
