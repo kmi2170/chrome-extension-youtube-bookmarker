@@ -8,15 +8,22 @@ const Popup = () => {
   const [currentVideoBookmarks, setCurrentVideoBookmarks] = useState<string[]>(
     []
   );
+  const [isYoutubePage, setIsYoutubePage] = useState(false);
 
   const getCurrentVideoInfo = async () => {
     const activeTab = await getActiveTabURL();
+
+    if (!activeTab.url?.includes('youtube.com/watch')) {
+      setIsYoutubePage(false);
+      return;
+    }
+
     console.log(activeTab);
     const queryParameters = activeTab.url?.split('?')[1];
     const urlParameters = new URLSearchParams(queryParameters);
     const videoId = urlParameters.get('v');
 
-    if (activeTab.url?.includes('youtube.com/watch') && videoId) {
+    if (videoId) {
       setCurrentVideoTitle(activeTab.title as string);
       setCurrentVideoId(videoId);
       chrome.storage.sync.get([videoId], (data) => {
@@ -24,6 +31,8 @@ const Popup = () => {
         setCurrentVideoBookmarks(videoBookmarks);
       });
     }
+
+    setIsYoutubePage(true);
   };
 
   // const messageListener = (obj, sende, response) => {
@@ -39,6 +48,14 @@ const Popup = () => {
     //   chrome.runtime.onMessage.removeListener(messageListener);
     // };
   }, []);
+
+  if (!isYoutubePage) {
+    return (
+      <div className="flex justify-center mt-8">
+        <p className="text-3xl text-red-900 ">This is not a Youtube page.</p>
+      </div>
+    );
+  }
 
   return (
     <>
