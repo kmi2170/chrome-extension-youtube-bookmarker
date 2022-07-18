@@ -6,7 +6,7 @@
   "action": {
     "default_popup": "popup.html",
     "default_title": "youtube timestamp bookmarker",
-    "default_icon": "icon-add-bookmark-48.png"
+    "default_icon": "assets/imagesicon-add-bookmark-144.png"
   },
   "content_scripts": [
     {
@@ -25,12 +25,25 @@
   "permissions": [
     "tabs",
     "bookmarks",
-    "unlimitedStorage"
+    "storage"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/icon-add-bookmark-48.png",
+        "assets/icon-add-bookmark-96.png",
+        "assets/icon-add-bookmark-144.png",
+        "assets/icon-add-bookmark-240.png"
+      ],
+      "matches": [
+        "https://*.youtube.com/*"
+      ]
+    }
   ],
   "icons": {
-    "48": "icon-add-bookmark-48.png",
-    "96": "icon-add-bookmark-96.png",
-    "144": "icon-add-bookmark-144.png",
-    "240": "icon-add-bookmark-240.png"
+    "48": "assets/icon-add-bookmark-48.png",
+    "96": "assets/icon-add-bookmark-96.png",
+    "144": "assets/icon-add-bookmark-144.png",
+    "240": "assets/icon-add-bookmark-240.png"
   }
 }
