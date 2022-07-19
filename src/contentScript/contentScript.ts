@@ -86,7 +86,6 @@ const bookmarkBtnStyle = {
     if (type === 'NEW') {
       currentVideoId = videoId;
       currentVideoTitle = videoTitle;
-      // console.log('videoId', videoId, 'vidoeTitle', videoTitle);
       newVideoLoaded();
     } else if (type === 'PLAY') {
       youtubePlayer.currentTime = value;

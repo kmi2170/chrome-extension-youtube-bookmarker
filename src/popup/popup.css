@@ -7,7 +7,8 @@ body {
 }
 
 body {
-  height: 400px;
+  max-height: 50vh;
+  overflow-y: auto;
   width: 400px;
   font-size: 100%;
 }

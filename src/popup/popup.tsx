@@ -16,7 +16,6 @@ const Popup = () => {
   } = useChromeApi();
 
   const handlePlay = (t: number) => {
-    console.log('play', t, activeTabId);
     chrome.tabs.sendMessage(activeTabId as number, {
       type: 'PLAY',
       value: t,
@@ -24,7 +23,6 @@ const Popup = () => {
   };
 
   const handleDelete = (t: number) => {
-    console.log('delete', t, activeTabId);
     const newVideoBookmarks = currentVideoBookmarks.filter(
       ({ time }) => time !== t
     );
@@ -37,22 +35,23 @@ const Popup = () => {
 
   if (!isYoutubePage) {
     return (
-      <div className="flex justify-center mt-8">
-        <p className="text-2xl text-red-900 ">This is not a Youtube page.</p>
+      <div className="flex justify-center m-8">
+        <p className="text-2xl text-red-600 ">This is not a Youtube page.</p>
       </div>
     );
   }
 
   return (
-    <>
+    <div className="flex flex-col justify-center m-8">
       <h1 className="text-3xl text-green-500">Youtube Timestamp Bookmarker</h1>
-      <h3>{currentVideoTitle}</h3>
-      <h4>{currentVideoId}</h4>
+      <h2 className="mt-2 p-1 pl-3 pr-3 font-bold text-2xl bg-sky-100 rounde-md">
+        {currentVideoTitle}
+      </h2>
 
       {currentVideoBookmarks?.length > 0 ? (
         currentVideoBookmarks.map(({ time, desc }: Bookmark, i) => {
           return (
-            <div key={i} className="flex justify-center items-center">
+            <h3 key={i} className="flex justify-center items-center">
               <a data-tip="Play" data-for="play">
                 <img
                   src="assets/icon-play.png"
@@ -83,13 +82,13 @@ const Popup = () => {
                 type="dark"
                 effect="float"
               />
-            </div>
+            </h3>
           );
         })
       ) : (
-        <i className="text-2xl">No Bookmarks to Show</i>
+        <h2 className="text-2xl">No Bookmarks to Show</h2>
       )}
-    </>
+    </div>
   );
 };
 
