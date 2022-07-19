@@ -5,8 +5,7 @@
   "manifest_version": 3,
   "action": {
     "default_popup": "popup.html",
-    "default_title": "youtube timestamp bookmarker",
-    "default_icon": "assets/icon-add-bookmark-144.png"
+    "default_title": "youtube timestamp bookmarker"
   },
   "content_scripts": [
     {
@@ -33,7 +32,9 @@
         "assets/icon-add-bookmark-48.png",
         "assets/icon-add-bookmark-96.png",
         "assets/icon-add-bookmark-144.png",
-        "assets/icon-add-bookmark-240.png"
+        "assets/icon-add-bookmark-240.png",
+        "assets/icon-delete.png",
+        "assets/icon-play.png"
       ],
       "matches": [
         "https://*.youtube.com/*"
