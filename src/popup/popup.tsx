@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ReactTooltip from 'react-tooltip';
 
-import { getActiveTabURL } from '../chrome-tabs';
+import useChromeApi from '../chrome-api/hook';
+import { Bookmark } from '../chrome-api/types';
 import './popup.css';
 
-type Bookmark = { time: number; desc: string };
-
 const Popup = () => {
-  const [activeTabId, setActiveTabId] = useState<number | null>(null);
-  const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
-  const [currentVideoTitle, setCurrentVideoTitle] = useState('');
-  const [currentVideoBookmarks, setCurrentVideoBookmarks] = useState<
-    Bookmark[]
-  >([]);
-  const [isYoutubePage, setIsYoutubePage] = useState(false);
+  const {
+    activeTabId,
+    currentVideoId,
+    currentVideoTitle,
+    currentVideoBookmarks,
+    isYoutubePage,
+    setCurrentVideoBookmarks,
+  } = useChromeApi();
 
   const handlePlay = (t: number) => {
     console.log('play', t, activeTabId);
@@ -34,55 +34,6 @@ const Popup = () => {
       value: t,
     });
   };
-
-  const getCurrentVideoInfo = async () => {
-    const activeTab = await getActiveTabURL();
-
-    if (!activeTab.url?.includes('youtube.com/watch')) {
-      setIsYoutubePage(false);
-      return;
-    }
-
-    const queryParameters = activeTab.url?.split('?')[1];
-    const urlParameters = new URLSearchParams(queryParameters);
-    const videoId = urlParameters.get('v');
-
-    if (videoId) {
-      setActiveTabId(activeTab.id as number);
-      setCurrentVideoTitle(activeTab.title as string);
-      setCurrentVideoId(videoId);
-      chrome.storage.sync.get([videoId], (data) => {
-        const videoBookmarks = data[videoId] ? JSON.parse(data[videoId]) : [];
-        setCurrentVideoBookmarks(videoBookmarks);
-      });
-    }
-
-    setIsYoutubePage(true);
-  };
-
-  // const messageListener = (obj, sende, response) => {
-  //   console.log(obj);
-  //   const { type, value, videoId } = obj;
-  //   setState(videoId);
-  // };
-
-  useEffect(() => {
-    getCurrentVideoInfo();
-    // chrome.storage.onChanged.addListener(function (changes, namespace) {
-    //   for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
-    //     console.log(
-    //       `Storage key "${key}" in namespace "${namespace}" changed.`,
-    //       `Old value was "${oldValue}", new value is "${newValue}".`
-    //     );
-    //   }
-    // });
-    // chrome.runtime.onMessage.addListener(messageListener);
-    // return () => {
-    //   chrome.runtime.onMessage.removeListener(messageListener);
-    // };
-  }, []);
-  // console.log({ currentVideoId });
-  // console.log({ currentVideoBookmarks });
 
   if (!isYoutubePage) {
     return (
