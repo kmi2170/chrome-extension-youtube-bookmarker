@@ -15,19 +15,20 @@ const Popup = () => {
   >([]);
   const [isYoutubePage, setIsYoutubePage] = useState(false);
 
-  const handlePlay = () => {
-    console.log('play');
+  const handlePlay = (t: number) => {
+    console.log('play', t, activeTabId);
+    chrome.tabs.sendMessage(activeTabId as number, {
+      type: 'PLAY',
+      value: t,
+    });
   };
-  console.log(activeTabId);
 
   const handleDelete = (t: number) => {
-    console.log('delete', t);
+    console.log('delete', t, activeTabId);
     const newVideoBookmarks = currentVideoBookmarks.filter(
       ({ time }) => time !== t
     );
-
     setCurrentVideoBookmarks(newVideoBookmarks);
-
     chrome.tabs.sendMessage(activeTabId as number, {
       type: 'DELETE',
       value: t,
@@ -80,8 +81,8 @@ const Popup = () => {
     //   chrome.runtime.onMessage.removeListener(messageListener);
     // };
   }, []);
-  console.log({ currentVideoId });
-  console.log({ currentVideoBookmarks });
+  // console.log({ currentVideoId });
+  // console.log({ currentVideoBookmarks });
 
   if (!isYoutubePage) {
     return (
@@ -108,7 +109,7 @@ const Popup = () => {
                   width="30px"
                   height="30px"
                   className="mr-2 hover:cursor-pointer"
-                  onClick={handlePlay}
+                  onClick={() => handlePlay(time)}
                 />
               </a>
               <ReactTooltip id="play" place="top" type="dark" effect="float" />
