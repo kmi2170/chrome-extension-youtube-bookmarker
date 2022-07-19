@@ -56,13 +56,18 @@ const bookmarkBtnStyle = {
 
   const addNewBookmarkEventHandler = async () => {
     const currentTime = youtubePlayer.currentTime;
+    const currentVideoBookmarks = await fetchBookmarks();
+
+    const duplicateTime = currentVideoBookmarks.filter(
+      ({ time }) => time == currentTime
+    );
+    if (duplicateTime.length > 0) return;
+
     const newBookmark = {
       title: currentVideoTitle,
       time: currentTime,
       desc: 'Bookmark at ' + getTime(currentTime),
     };
-    console.log({ newBookmark });
-    const currentVideoBookmarks = await fetchBookmarks();
     chrome.storage.sync.set({
       [currentVideoId]: JSON.stringify(
         [...currentVideoBookmarks, newBookmark].sort((a, b) => a.time - b.time)
@@ -74,6 +79,10 @@ const bookmarkBtnStyle = {
     const { type, value, videoId, videoTitle } = obj;
 
     // clearStorage();
+    chrome.storage.sync.get(null, function (all) {
+      console.log(all);
+    });
+
     if (type === 'NEW') {
       currentVideoId = videoId;
       currentVideoTitle = videoTitle;
