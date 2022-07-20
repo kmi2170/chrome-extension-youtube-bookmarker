@@ -7,9 +7,12 @@ const useChromeApi = () => {
   const [activeTabId, setActiveTabId] = useState<number | null>(null);
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
   const [currentVideoTitle, setCurrentVideoTitle] = useState('');
+  const [currentVideoUrl, setCurrentVideoUrl] = useState('');
+
   const [currentVideoBookmarks, setCurrentVideoBookmarks] = useState<
     VideoBookmark[]
   >([]);
+
   const [isYoutubePage, setIsYoutubePage] = useState(false);
   const [isYoutubeWatchPage, setIsYoutubeWatchPage] = useState(false);
 
@@ -36,10 +39,13 @@ const useChromeApi = () => {
       const videoId = urlParameters.get('v');
 
       setIsYoutubeWatchPage(true);
+      setCurrentVideoId(videoId);
       setActiveTabId(activeTab.id as number);
       setCurrentVideoTitle(activeTab.title as string);
-      setCurrentVideoId(videoId);
+      setCurrentVideoUrl(activeTab.url as string);
+      return;
     }
+
     setIsYoutubeWatchPage(false);
   };
 
@@ -51,6 +57,7 @@ const useChromeApi = () => {
     activeTabId,
     currentVideoId,
     currentVideoTitle,
+    currentVideoUrl,
     currentVideoBookmarks,
     isYoutubePage,
     isYoutubeWatchPage,
