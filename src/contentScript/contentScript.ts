@@ -1,8 +1,14 @@
 const { getTime, css } = require('../utils');
 
 type VideoBookmark = {
-  time: number;
-  desc: string;
+  id: string;
+  url: string;
+  title: string;
+  createdAt: string;
+  timestamp: {
+    time: number;
+    desc: string;
+  }[];
 };
 
 const bookmarkBtnStyle = {
@@ -14,12 +20,17 @@ const bookmarkBtnStyle = {
   let youtubeLeftControls: Element, youtubePlayer: HTMLVideoElement;
   let currentVideoId = '';
   let currentVideoTitle = '';
+  let currentVideoUrl = '';
   let currentVideoBookmarks: VideoBookmark[] | [] = [];
 
   const fetchBookmarks: () => Promise<VideoBookmark[]> = () => {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([currentVideoId], (obj) => {
-        resolve(obj[currentVideoId] ? JSON.parse(obj[currentVideoId]) : []);
+      chrome.storage.sync.get('yt-tstamp-bkmarker', (obj) => {
+        resolve(
+          obj['yt-tstamp-bkmarker'] ? JSON.parse(obj['yt-tstamp-bkmarker']) : []
+        );
+        // chrome.storage.sync.get([currentVideoId], (obj) => {
+        // resolve(obj[currentVideoId] ? JSON.parse(obj[currentVideoId]) : []);
       });
     });
   };
@@ -28,6 +39,7 @@ const bookmarkBtnStyle = {
     const bookmarkBtnExists =
       document.getElementsByClassName('bookmark-btn')[0];
     currentVideoBookmarks = await fetchBookmarks();
+    console.log({ currentVideoBookmarks });
 
     if (!bookmarkBtnExists) {
       const bookmarkBtn = document.createElement('img');
@@ -58,25 +70,63 @@ const bookmarkBtnStyle = {
     const currentTime = youtubePlayer.currentTime;
     const currentVideoBookmarks = await fetchBookmarks();
 
-    const duplicateTime = currentVideoBookmarks.filter(
-      ({ time }) => time == currentTime
-    );
-    if (duplicateTime.length > 0) return;
+    const isCurrentVideoExists =
+      currentVideoBookmarks.filter((bookmark) => bookmark.id == currentVideoId)
+        .length > 0;
+    console.log({ isCurrentVideoExists });
 
-    const newBookmark = {
-      title: currentVideoTitle,
-      time: currentTime,
-      desc: 'Bookmark at ' + getTime(currentTime),
-    };
+    let newVideoBookmarks = [];
+    if (isCurrentVideoExists) {
+      newVideoBookmarks = currentVideoBookmarks.map((bookmark) => {
+        if (bookmark.id === currentVideoId) {
+          const isTimestampExists =
+            bookmark.timestamp.filter(({ time }) => time == currentTime)
+              .length > 0;
+          if (isTimestampExists) return bookmark;
+
+          const newTimestamp = [
+            ...bookmark.timestamp,
+            {
+              time: currentTime,
+              desc: 'Bookmark at ' + getTime(currentTime),
+            },
+          ];
+
+          return {
+            ...bookmark,
+            timestamp: newTimestamp.sort((a, b) => a.time - b.time),
+          };
+        }
+
+        return bookmark;
+      });
+    } else {
+      const newBookmark: VideoBookmark = {
+        id: currentVideoId,
+        title: currentVideoTitle,
+        url: currentVideoUrl,
+        createdAt: new Date().toISOString(),
+        timestamp: [
+          {
+            time: currentTime,
+            desc: 'Bookmark at ' + getTime(currentTime),
+          },
+        ],
+      };
+
+      newVideoBookmarks = [...currentVideoBookmarks, newBookmark];
+    }
+    console.log({ newVideoBookmarks });
+
     chrome.storage.sync.set({
-      [currentVideoId]: JSON.stringify(
-        [...currentVideoBookmarks, newBookmark].sort((a, b) => a.time - b.time)
+      'yt-tstamp-bkmarker': JSON.stringify(
+        newVideoBookmarks.sort((a, b) => +a.createdAt - +b.createdAt)
       ),
     });
   };
 
   chrome.runtime.onMessage.addListener((obj, sender, response) => {
-    const { type, value, videoId, videoTitle } = obj;
+    const { type, value, videoId, videoTitle, videoUrl } = obj;
 
     // clearStorage();
     chrome.storage.sync.get(null, function (all) {
@@ -86,6 +136,9 @@ const bookmarkBtnStyle = {
     if (type === 'NEW') {
       currentVideoId = videoId;
       currentVideoTitle = videoTitle;
+      currentVideoUrl = videoUrl;
+      console.log(currentVideoId);
+
       newVideoLoaded();
     } else if (type === 'PLAY') {
       youtubePlayer.currentTime = value;

@@ -6,11 +6,15 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   ) {
     const queryParameters = tab.url.split('?')[1];
     const urlParameters = new URLSearchParams(queryParameters);
+    const videoId = urlParameters.get('v');
     const videoTitle = tab.title;
+    const videoUrl = tab.url;
+
     const obj = {
       type: 'NEW',
-      videoId: urlParameters.get('v'),
+      videoId,
       videoTitle,
+      videoUrl,
     };
 
     chrome.tabs.sendMessage(tabId, obj, () => console.log('send Message', obj));
