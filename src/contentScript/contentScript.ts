@@ -1,15 +1,5 @@
-const { getTime, css } = require('../utils');
-
-type VideoBookmark = {
-  id: string;
-  url: string;
-  title: string;
-  createdAt: string;
-  timestamp: {
-    time: number;
-    desc: string;
-  }[];
-};
+import { getTime, css } from '../utils';
+import { VideoBookmark } from '../chrome-api/types';
 
 const bookmarkBtnStyle = {
   height: '100%',
