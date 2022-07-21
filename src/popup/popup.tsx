@@ -16,6 +16,7 @@ const Popup = () => {
     isYoutubeWatchPage,
     setCurrentVideoBookmarks,
   } = useChromeApi();
+  console.log(currentVideoBookmarks);
 
   if (!isYoutubePage) {
     return (
@@ -24,8 +25,10 @@ const Popup = () => {
       </div>
     );
   }
-  console.log(isYoutubeWatchPage);
-  console.log(currentVideoBookmarks);
+
+  const isCurrentVideoBookmarked =
+    currentVideoBookmarks.filter(({ id }) => id === currentVideoId).length ===
+    1;
 
   return (
     <div className="flex flex-col justify-center p-8">
@@ -35,34 +38,64 @@ const Popup = () => {
 
       {isYoutubeWatchPage ? (
         <div className="mt-2 p-1 pl-3 pr-3 font-bold text-2xl  rounde-md">
-          <VideoBookmarkItem
-            tabId={activeTabId}
-            videoId={currentVideoId as string}
-            videoTitle={currentVideoTitle}
-            videoUrl={currentVideoUrl}
-            videoBookmarks={currentVideoBookmarks}
-            setVideoBookmarks={setCurrentVideoBookmarks}
-          />
-          <TimeStamps
-            tabId={activeTabId}
-            videoId={currentVideoId}
-            videoBookmarks={currentVideoBookmarks}
-            setVideoBookmarks={setCurrentVideoBookmarks}
-          />
+          {isCurrentVideoBookmarked ? (
+            <>
+              <VideoBookmarkItem
+                videoId={currentVideoId as string}
+                videoTitle={currentVideoTitle}
+                videoUrl={currentVideoUrl}
+                videoBookmarks={currentVideoBookmarks}
+                setVideoBookmarks={setCurrentVideoBookmarks}
+                active
+              />
+              <TimeStamps
+                tabId={activeTabId}
+                videoId={currentVideoId}
+                videoBookmarks={currentVideoBookmarks}
+                setVideoBookmarks={setCurrentVideoBookmarks}
+              />
+            </>
+          ) : (
+            <div className="flex justify-center ">
+              <h2 className="text-2xl mt-2 mb-3">
+                Current Page is not Bookmarked
+              </h2>
+            </div>
+          )}
+          {currentVideoBookmarks.map(({ id, title, url }) => {
+            if (id !== currentVideoId) {
+              return (
+                <VideoBookmarkItem
+                  key={id}
+                  videoId={id}
+                  videoTitle={title}
+                  videoUrl={url}
+                  videoBookmarks={currentVideoBookmarks}
+                  setVideoBookmarks={setCurrentVideoBookmarks}
+                />
+              );
+            }
+          })}
         </div>
       ) : (
         <div className="">
-          {currentVideoBookmarks.map(({ id, title, url }) => (
-            <VideoBookmarkItem
-              key={id}
-              tabId={activeTabId}
-              videoId={id}
-              videoTitle={title}
-              videoUrl={url}
-              videoBookmarks={currentVideoBookmarks}
-              setVideoBookmarks={setCurrentVideoBookmarks}
-            />
-          ))}
+          {currentVideoBookmarks.length > 0 ? (
+            currentVideoBookmarks.map(({ id, title, url }) => (
+              <VideoBookmarkItem
+                key={id}
+                videoId={id}
+                videoTitle={title}
+                videoUrl={url}
+                videoBookmarks={currentVideoBookmarks}
+                setVideoBookmarks={setCurrentVideoBookmarks}
+                active
+              />
+            ))
+          ) : (
+            <div className="flex justify-center ">
+              <h2 className="text-2xl mt-2 mb-3">No bookmarks to show</h2>
+            </div>
+          )}
         </div>
       )}
     </div>

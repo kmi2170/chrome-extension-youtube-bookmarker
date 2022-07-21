@@ -51,7 +51,7 @@ const TimeStamps = ({
   };
 
   return (
-    <div className="mt-2 flex flex-col">
+    <div className="mt-2 mb-4 flex flex-col ">
       {timeStamps?.length > 0 ? (
         timeStamps.map(({ time, desc }) => {
           return (
@@ -59,7 +59,7 @@ const TimeStamps = ({
               key={desc}
               className="flex justify-center items-center bg-pink-50 rounded-full"
             >
-              <a data-tip="Play" data-for="play">
+              <a data-tip="Play" data-for={`play-${desc}`}>
                 <img
                   src="assets/icon-play.png"
                   alt="play"
@@ -69,11 +69,16 @@ const TimeStamps = ({
                   onClick={() => handlePlay(time)}
                 />
               </a>
-              <ReactTooltip id="play" place="top" type="dark" effect="float" />
+              <ReactTooltip
+                id={`play-${desc}`}
+                place="top"
+                type="dark"
+                effect="float"
+              />
 
               <div className="pt-1 text-2xl">{desc}</div>
 
-              <a data-tip="Delete" data-for="delete">
+              <a data-tip="Delete" data-for={`delete-${desc}`}>
                 <img
                   src="assets/icon-delete.png"
                   alt="delete"
@@ -84,7 +89,7 @@ const TimeStamps = ({
                 />
               </a>
               <ReactTooltip
-                id="delete"
+                id={`delete-${desc}`}
                 place="top"
                 type="dark"
                 effect="float"
@@ -94,7 +99,7 @@ const TimeStamps = ({
         })
       ) : (
         <div className="flex justify-center ">
-          <h2 className="text-2xl mt-2">No Bookmarks to Show</h2>
+          <h2 className="text-2xl mt-2">No Timestamp to Show</h2>
         </div>
       )}
     </div>

@@ -5,7 +5,7 @@ import { VideoBookmark } from '../../chrome-api/types';
 import { getActiveTabURL } from '../../chrome-api/getActiveTabURL';
 
 type VideoBookmarkItemProps = {
-  tabId: number | null;
+  active?: boolean;
   videoId: string;
   videoUrl: string;
   videoTitle: string;
@@ -14,7 +14,7 @@ type VideoBookmarkItemProps = {
 };
 
 const VideoBookmarkItem = ({
-  tabId,
+  active = false,
   videoId,
   videoUrl,
   videoTitle,
@@ -34,11 +34,14 @@ const VideoBookmarkItem = ({
     });
   };
 
+  const activeClass = `mt-2 p-1 pl-8 pr-8 font-bold text-2xl rounded-full hover:cursor-pointer hover:drop-shadow-lg ${
+    active
+      ? 'bg-purple-900 text-white'
+      : 'bg-white border-solid border-2 border-purple-900 text-purple-900'
+  }`;
+
   return (
-    <h2
-      key={videoId}
-      className="mt-2 p-1 pl-8 pr-8 font-bold text-2xl text-white  bg-purple-900 rounded-full hover:cursor-pointer hover:drop-shadow-2xl"
-    >
+    <h2 key={videoId} className={activeClass}>
       <div className="flex flex-row justify-between items-center">
         <a href={videoUrl} target="_blank">
           {videoTitle}
@@ -47,8 +50,8 @@ const VideoBookmarkItem = ({
           <img
             src="assets/icon-delete.png"
             alt="delete"
-            width="20px"
-            height="20px"
+            width="30px"
+            height="30px"
             className="ml-2 hover:cursor-pointer"
             onClick={() => handleDelete(videoId)}
           />

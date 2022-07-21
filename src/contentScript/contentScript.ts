@@ -1,5 +1,13 @@
 import { getTime, css } from '../utils';
 import { VideoBookmark } from '../chrome-api/types';
+import {
+  storeVideoBookmarks,
+  fetchBookmarks,
+  deleteVideoHandler,
+  deleteTimestampHandler,
+  // showAllStorage,
+  // clearAllStorage,
+} from './contentScript-utils';
 
 const bookmarkBtnStyle = {
   height: '100%',
@@ -7,61 +15,20 @@ const bookmarkBtnStyle = {
 };
 
 (() => {
+  const key_ytbookmark = 'yt-bookmarks';
+
   let youtubeLeftControls: Element, youtubePlayer: HTMLVideoElement;
   let currentVideoId = '';
   let currentVideoTitle = '';
   let currentVideoUrl = '';
   let currentVideoBookmarks: VideoBookmark[] | [] = [];
 
-  const fetchBookmarks: () => Promise<VideoBookmark[]> = () => {
-    return new Promise((resolve) => {
-      chrome.storage.sync.get('yt-tstamp-bkmarker', (obj) => {
-        resolve(
-          obj['yt-tstamp-bkmarker'] ? JSON.parse(obj['yt-tstamp-bkmarker']) : []
-        );
-      });
-    });
-  };
-
-  const newVideoLoaded = async () => {
-    const bookmarkBtnExists =
-      document.getElementsByClassName('bookmark-btn')[0];
-    currentVideoBookmarks = await fetchBookmarks();
-    console.log({ currentVideoBookmarks });
-
-    if (!bookmarkBtnExists) {
-      const bookmarkBtn = document.createElement('img');
-
-      bookmarkBtn.src = chrome.runtime.getURL(
-        'assets/icon-add-bookmark-96.png'
-      );
-      bookmarkBtn.className = 'ytp-button ' + 'bookmark-btn';
-      bookmarkBtn.title = 'Click to save current timestamp';
-      css(bookmarkBtn, bookmarkBtnStyle);
-
-      youtubeLeftControls =
-        document.getElementsByClassName('ytp-left-controls')[0];
-      youtubePlayer = document.getElementsByClassName(
-        'video-stream'
-      )[0] as HTMLVideoElement;
-
-      youtubeLeftControls.append(bookmarkBtn);
-      bookmarkBtn.addEventListener('click', addNewBookmarkEventHandler);
-    }
-  };
-
-  const clearStorage = () => {
-    chrome.storage.sync.clear(() => console.log('clear storage'));
-  };
-
   const addNewBookmarkEventHandler = async () => {
-    const currentTime = youtubePlayer.currentTime;
-    const currentVideoBookmarks = await fetchBookmarks();
-
+    const currentVideoBookmarks = await fetchBookmarks(key_ytbookmark);
+    const currentTime = Math.round(youtubePlayer.currentTime);
     const isCurrentVideoExists =
       currentVideoBookmarks.filter((bookmark) => bookmark.id == currentVideoId)
         .length > 0;
-    console.log({ isCurrentVideoExists });
 
     let newVideoBookmarks = [];
     if (isCurrentVideoExists) {
@@ -104,72 +71,62 @@ const bookmarkBtnStyle = {
 
       newVideoBookmarks = [...currentVideoBookmarks, newBookmark];
     }
-    console.log({ newVideoBookmarks });
 
-    chrome.storage.sync.set({
-      'yt-tstamp-bkmarker': JSON.stringify(
-        newVideoBookmarks.sort((a, b) => +a.createdAt - +b.createdAt)
-      ),
-    });
-  };
-
-  const deleteTimestampHandler = (value: number) => {
-    const newVideoBookmarks = currentVideoBookmarks.map((bookmark) => {
-      if (bookmark.id === currentVideoId) {
-        const newTimestamp = bookmark.timestamp.filter(
-          ({ time }) => time !== value
-        );
-        return { ...bookmark, timestamp: newTimestamp };
-      }
-      return bookmark;
-    });
-
-    return newVideoBookmarks;
-  };
-
-  const deleteVideoHandler = (videoId: string) => {
-    const newVideoBookmarks = currentVideoBookmarks.filter(
-      ({ id }) => id !== videoId
+    storeVideoBookmarks(
+      key_ytbookmark,
+      newVideoBookmarks.sort((a, b) => +a.createdAt - +b.createdAt)
     );
+  };
 
-    return newVideoBookmarks;
+  const newVideoLoaded = async () => {
+    currentVideoBookmarks = await fetchBookmarks(key_ytbookmark);
+    console.log('fetch curretVideoBookmarks', currentVideoBookmarks);
+
+    const bookmarkBtnExists =
+      document.getElementsByClassName('bookmark-btn')[0];
+    if (!bookmarkBtnExists) {
+      const bookmarkBtn = document.createElement('img');
+      bookmarkBtn.title = 'Click to save current timestamp';
+      bookmarkBtn.className = 'ytp-button ' + 'bookmark-btn';
+      bookmarkBtn.src = chrome.runtime.getURL(
+        'assets/icon-add-bookmark-96.png'
+      );
+      css(bookmarkBtn, bookmarkBtnStyle);
+
+      youtubePlayer = document.getElementsByClassName(
+        'video-stream'
+      )[0] as HTMLVideoElement;
+      youtubeLeftControls =
+        document.getElementsByClassName('ytp-left-controls')[0];
+
+      youtubeLeftControls.append(bookmarkBtn);
+      bookmarkBtn.addEventListener('click', addNewBookmarkEventHandler);
+    }
   };
 
   chrome.runtime.onMessage.addListener((obj, sender, response) => {
     const { type, value, videoId, videoTitle, videoUrl } = obj;
 
-    // clearStorage();
-    chrome.storage.sync.get(null, function (all) {
-      console.log(all);
-    });
+    // clearAllStorage();
+    // showAllStorage();
 
     if (type === 'NEW') {
       currentVideoId = videoId;
       currentVideoTitle = videoTitle;
       currentVideoUrl = videoUrl;
-      console.log(currentVideoId);
-
-      newVideoLoaded();
     } else if (type === 'PLAY') {
       youtubePlayer.currentTime = value;
     } else if (type === 'DELETE_TIMESTAMP') {
-      currentVideoBookmarks = deleteTimestampHandler(value);
-
-      chrome.storage.sync.set({
-        'yt-tstamp-bkmarker': JSON.stringify(currentVideoBookmarks),
-      });
-
+      currentVideoBookmarks = deleteTimestampHandler(
+        value,
+        currentVideoId,
+        currentVideoBookmarks
+      );
+      storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks);
       response(currentVideoBookmarks);
     } else if (type === 'DELETE_VIDEO') {
-      console.log('before', currentVideoBookmarks);
-      currentVideoBookmarks = deleteVideoHandler(value);
-      console.log('delete timestamp', value);
-      console.log('after', currentVideoBookmarks);
-
-      chrome.storage.sync.set({
-        'yt-tstamp-bkmarker': JSON.stringify(currentVideoBookmarks),
-      });
-
+      currentVideoBookmarks = deleteVideoHandler(value, currentVideoBookmarks);
+      storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks);
       response(currentVideoBookmarks);
     }
   });

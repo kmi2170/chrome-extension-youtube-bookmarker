@@ -4,6 +4,7 @@ import { getActiveTabURL } from './getActiveTabURL';
 import { VideoBookmark } from './types';
 
 const useChromeApi = () => {
+  const key_ytbookmark = 'yt-bookmarks';
   const [activeTabId, setActiveTabId] = useState<number | null>(null);
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
   const [currentVideoTitle, setCurrentVideoTitle] = useState('');
@@ -25,9 +26,9 @@ const useChromeApi = () => {
     }
     setIsYoutubePage(true);
 
-    chrome.storage.sync.get('yt-tstamp-bkmarker', (data) => {
-      const videoBookmarks = data['yt-tstamp-bkmarker']
-        ? JSON.parse(data['yt-tstamp-bkmarker'])
+    chrome.storage.sync.get([key_ytbookmark], (data) => {
+      const videoBookmarks = data[key_ytbookmark]
+        ? JSON.parse(data[key_ytbookmark])
         : [];
 
       setCurrentVideoBookmarks(videoBookmarks);
