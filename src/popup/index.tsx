@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import Popup from './popup';
+import Popup from './popup/popup';
 import '../static/tailwind.css';
 
 const container = document.createElement('div');

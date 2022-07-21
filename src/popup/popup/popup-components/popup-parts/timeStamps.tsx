@@ -1,7 +1,7 @@
 import ReactTooltip from 'react-tooltip';
 import React from 'react';
 
-import { VideoBookmark } from '../../chrome-api/types';
+import { VideoBookmark } from '../../../../chrome-api/types';
 
 type TimeStampsProps = {
   tabId: number | null;
