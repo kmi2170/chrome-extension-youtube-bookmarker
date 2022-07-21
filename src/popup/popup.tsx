@@ -17,24 +17,6 @@ const Popup = () => {
     setCurrentVideoBookmarks,
   } = useChromeApi();
 
-  const handlePlay = (t: number) => {
-    chrome.tabs.sendMessage(activeTabId as number, {
-      type: 'PLAY',
-      value: t,
-    });
-  };
-
-  const handleDelete = (t: number) => {
-    const newVideoBookmarks = currentVideoBookmarks.filter(
-      ({ time }) => time !== t
-    );
-    setCurrentVideoBookmarks(newVideoBookmarks);
-    chrome.tabs.sendMessage(activeTabId as number, {
-      type: 'DELETE',
-      value: t,
-    });
-  };
-
   if (!isYoutubePage) {
     return (
       <div className="flex justify-center m-8">
@@ -52,21 +34,34 @@ const Popup = () => {
       </h1>
 
       {isYoutubeWatchPage ? (
-        <h2 className="mt-2 p-1 pl-3 pr-3 font-bold text-2xl  rounde-md">
+        <div className="mt-2 p-1 pl-3 pr-3 font-bold text-2xl  rounde-md">
           <VideoBookmarkItem
-            id={currentVideoId as string}
-            title={currentVideoTitle}
-            url={currentVideoUrl}
+            tabId={activeTabId}
+            videoId={currentVideoId as string}
+            videoTitle={currentVideoTitle}
+            videoUrl={currentVideoUrl}
+            videoBookmarks={currentVideoBookmarks}
+            setVideoBookmarks={setCurrentVideoBookmarks}
           />
           <TimeStamps
-            videoBookmarks={currentVideoBookmarks}
+            tabId={activeTabId}
             videoId={currentVideoId}
+            videoBookmarks={currentVideoBookmarks}
+            setVideoBookmarks={setCurrentVideoBookmarks}
           />
-        </h2>
+        </div>
       ) : (
         <div className="">
           {currentVideoBookmarks.map(({ id, title, url }) => (
-            <VideoBookmarkItem id={id} title={title} url={url} />
+            <VideoBookmarkItem
+              key={id}
+              tabId={activeTabId}
+              videoId={id}
+              videoTitle={title}
+              videoUrl={url}
+              videoBookmarks={currentVideoBookmarks}
+              setVideoBookmarks={setCurrentVideoBookmarks}
+            />
           ))}
         </div>
       )}

@@ -19,8 +19,6 @@ const bookmarkBtnStyle = {
         resolve(
           obj['yt-tstamp-bkmarker'] ? JSON.parse(obj['yt-tstamp-bkmarker']) : []
         );
-        // chrome.storage.sync.get([currentVideoId], (obj) => {
-        // resolve(obj[currentVideoId] ? JSON.parse(obj[currentVideoId]) : []);
       });
     });
   };
@@ -115,6 +113,28 @@ const bookmarkBtnStyle = {
     });
   };
 
+  const deleteTimestampHandler = (value: number) => {
+    const newVideoBookmarks = currentVideoBookmarks.map((bookmark) => {
+      if (bookmark.id === currentVideoId) {
+        const newTimestamp = bookmark.timestamp.filter(
+          ({ time }) => time !== value
+        );
+        return { ...bookmark, timestamp: newTimestamp };
+      }
+      return bookmark;
+    });
+
+    return newVideoBookmarks;
+  };
+
+  const deleteVideoHandler = (videoId: string) => {
+    const newVideoBookmarks = currentVideoBookmarks.filter(
+      ({ id }) => id !== videoId
+    );
+
+    return newVideoBookmarks;
+  };
+
   chrome.runtime.onMessage.addListener((obj, sender, response) => {
     const { type, value, videoId, videoTitle, videoUrl } = obj;
 
@@ -132,12 +152,22 @@ const bookmarkBtnStyle = {
       newVideoLoaded();
     } else if (type === 'PLAY') {
       youtubePlayer.currentTime = value;
-    } else if (type === 'DELETE') {
-      currentVideoBookmarks = currentVideoBookmarks.filter(
-        (b) => b.time != value
-      );
+    } else if (type === 'DELETE_TIMESTAMP') {
+      currentVideoBookmarks = deleteTimestampHandler(value);
+
       chrome.storage.sync.set({
-        [currentVideoId]: JSON.stringify(currentVideoBookmarks),
+        'yt-tstamp-bkmarker': JSON.stringify(currentVideoBookmarks),
+      });
+
+      response(currentVideoBookmarks);
+    } else if (type === 'DELETE_VIDEO') {
+      console.log('before', currentVideoBookmarks);
+      currentVideoBookmarks = deleteVideoHandler(value);
+      console.log('delete timestamp', value);
+      console.log('after', currentVideoBookmarks);
+
+      chrome.storage.sync.set({
+        'yt-tstamp-bkmarker': JSON.stringify(currentVideoBookmarks),
       });
 
       response(currentVideoBookmarks);
