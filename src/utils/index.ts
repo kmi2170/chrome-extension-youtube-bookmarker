@@ -15,10 +15,11 @@ export const removeCharsFromString = (
   charsToBeRemoved: string
 ) => {
   const num_chars = charsToBeRemoved.length;
-  const isStringContainChars =
+  const isCharsInString =
     string.slice(string.length - num_chars, string.length) === charsToBeRemoved;
+  console.log({ isCharsInString });
 
-  if (isStringContainChars) {
+  if (isCharsInString) {
     const newString = string.slice(0, string.length - num_chars - 1);
 
     return newString;

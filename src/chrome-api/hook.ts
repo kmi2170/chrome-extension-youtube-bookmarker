@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { removeCharsFromString } from '../utils';
 import { getActiveTabURL } from './getActiveTabURL';
 import { VideoBookmark } from './types';
 
@@ -42,7 +43,9 @@ const useChromeApi = () => {
       setIsYoutubeWatchPage(true);
       setCurrentVideoId(videoId);
       setActiveTabId(activeTab.id as number);
-      setCurrentVideoTitle(activeTab.title as string);
+      setCurrentVideoTitle(
+        removeCharsFromString(activeTab.title as string, '- YouTube')
+      );
       setCurrentVideoUrl(activeTab.url as string);
       return;
     }

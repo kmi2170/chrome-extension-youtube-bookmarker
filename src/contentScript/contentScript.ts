@@ -58,7 +58,7 @@ const bookmarkBtnStyle = {
     } else {
       const newBookmark: VideoBookmark = {
         id: currentVideoId,
-        title: removeCharsFromString(currentVideoTitle, ' - YouTube'),
+        title: removeCharsFromString(currentVideoTitle, '- YouTube'),
         url: currentVideoUrl,
         createdAt: new Date().toISOString(),
         timestamp: [
