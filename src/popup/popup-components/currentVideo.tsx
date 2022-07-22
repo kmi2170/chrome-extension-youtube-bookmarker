@@ -28,7 +28,8 @@ const CurrentVideo = ({
       {isVideoBookmarked ? (
         <div className="w-full flex flex-col justify-center">
           <BookmarkedVideoItem
-            videoId={videoId as string}
+            tabId={tabId}
+            videoId={videoId}
             videoTitle={videoTitle}
             videoUrl={videoUrl}
             videoBookmarks={videoBookmarks}

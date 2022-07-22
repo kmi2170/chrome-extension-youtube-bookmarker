@@ -2,9 +2,9 @@ import React from 'react';
 import ReactTooltip from 'react-tooltip';
 
 import { VideoBookmark } from '../../../chrome-api/types';
-import { getActiveTabURL } from '../../../chrome-api/getActiveTabURL';
 
 type BookmarkedVideoItemProps = {
+  tabId: number;
   currentVideo?: boolean;
   excludeVideoId?: string;
   videoId: string;
@@ -15,6 +15,7 @@ type BookmarkedVideoItemProps = {
 };
 
 const BookmarkedVideoItem = ({
+  tabId,
   currentVideo,
   excludeVideoId = undefined,
   videoId,
@@ -23,14 +24,12 @@ const BookmarkedVideoItem = ({
   videoBookmarks,
   setVideoBookmarks,
 }: BookmarkedVideoItemProps) => {
-  const handleDelete = async (vId: string) => {
-    const activeTab = await getActiveTabURL();
-
-    console.log('delete', vId, activeTab.id);
+  const handleDelete = (vId: string) => {
+    console.log('delete', vId, tabId);
     const newVideoBookmarks = videoBookmarks.filter(({ id }) => id !== vId);
     setVideoBookmarks(newVideoBookmarks);
 
-    chrome.tabs.sendMessage(activeTab.id as number, {
+    chrome.tabs.sendMessage(tabId, {
       type: 'DELETE_VIDEO',
       value: vId,
     });
@@ -54,6 +53,7 @@ const BookmarkedVideoItem = ({
             <a
               href={videoUrl}
               target="_blank"
+              rel="noreferrer"
               className="w-11/12"
               data-tip="Open"
               data-for={`open-video-${videoId}`}
