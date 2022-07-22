@@ -1,4 +1,4 @@
-import { getTime, css } from '../utils';
+import { getTime, css, removeCharsFromString } from '../utils';
 import { VideoBookmark } from '../chrome-api/types';
 import {
   storeVideoBookmarks,
@@ -58,7 +58,7 @@ const bookmarkBtnStyle = {
     } else {
       const newBookmark: VideoBookmark = {
         id: currentVideoId,
-        title: currentVideoTitle,
+        title: removeCharsFromString(currentVideoTitle, '- YouTube'),
         url: currentVideoUrl,
         createdAt: new Date().toISOString(),
         timestamp: [
@@ -112,6 +112,7 @@ const bookmarkBtnStyle = {
 
     if (type === 'NEW') {
       currentVideoId = videoId;
+      // currentVideoTitle = videoTitle;
       currentVideoTitle = videoTitle;
       currentVideoUrl = videoUrl;
     } else if (type === 'PLAY') {

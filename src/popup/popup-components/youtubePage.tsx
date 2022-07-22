@@ -1,5 +1,5 @@
 import React from 'react';
-import { VideoBookmark } from '../../../chrome-api/types';
+import { VideoBookmark } from '../../chrome-api/types';
 import VideoBookmarkItem from './popup-parts/videoBookmarkItem';
 
 export type YoutubePageProps = {

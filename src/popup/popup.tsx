@@ -1,6 +1,6 @@
 import React from 'react';
 
-import useChromeApi from '../../chrome-api/hook';
+import useChromeApi from '../chrome-api/hook';
 // import VideoBookmarkItem from './popup-parts/videoBookmarkItem';
 // import TimeStamps from './popup-parts/timeStamps';
 import NotYoutubePage from './popup-components/notYoutube';
@@ -30,24 +30,23 @@ const Popup = () => {
     1;
 
   return (
-    <div className="flex flex-col justify-center p-8">
+    <div className="flex flex-col justify-center p-8 w-full">
       <h1 className="text-3xl font-bold text-indigo-500 mb-4">
         Youtube Timestamp Bookmarker
       </h1>
 
       {isYoutubeWatchPage && (
-        <div className="mt-2 p-1 pl-3 pr-3 font-bold text-2xl  rounde-md">
-          <YoutubeWatchPage
-            tabId={activeTabId as number}
-            isVideoBookmarked={isCurrentVideoBookmarked}
-            videoId={currentVideoId as string}
-            videoTitle={currentVideoTitle}
-            videoUrl={currentVideoUrl}
-            videoBookmarks={currentVideoBookmarks}
-            setVideoBookmarks={setCurrentVideoBookmarks}
-          />
-        </div>
+        <YoutubeWatchPage
+          tabId={activeTabId as number}
+          isVideoBookmarked={isCurrentVideoBookmarked}
+          videoId={currentVideoId as string}
+          videoTitle={currentVideoTitle}
+          videoUrl={currentVideoUrl}
+          videoBookmarks={currentVideoBookmarks}
+          setVideoBookmarks={setCurrentVideoBookmarks}
+        />
       )}
+
       <YoutubePage
         videoBookmarks={currentVideoBookmarks}
         setVideoBookmarks={setCurrentVideoBookmarks}
