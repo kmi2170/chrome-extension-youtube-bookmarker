@@ -1,13 +1,12 @@
 export const getTime = (t: number) => {
-  var date = new Date(0);
+  const date = new Date(0);
   date.setSeconds(t);
 
   return date.toISOString().substr(11, 8);
 };
 
-export const css = (element: HTMLElement, style: Record<string, any>) => {
-  for (const property in style)
-    element.style[property as any] = style[property];
+export const css = (element: HTMLElement, style: CSSStyleDeclaration) => {
+  for (const property in style) element.style[property] = style[property];
 };
 
 export const removeCharsFromString = (
@@ -17,7 +16,6 @@ export const removeCharsFromString = (
   const num_chars = charsToBeRemoved.length;
   const isCharsInString =
     string.slice(string.length - num_chars, string.length) === charsToBeRemoved;
-  console.log({ isCharsInString });
 
   if (isCharsInString) {
     const newString = string.slice(0, string.length - num_chars - 1);
