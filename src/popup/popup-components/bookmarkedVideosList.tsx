@@ -1,25 +1,26 @@
 import React from 'react';
 import { VideoBookmark } from '../../chrome-api/types';
-import VideoBookmarkItem from './popup-parts/videoBookmarkItem';
+import BookmarkedVideoItem from './popup-parts/bookmarkedVideoItem';
 
-export type YoutubePageProps = {
+export type BookmarkedVideosListProps = {
   videoBookmarks: VideoBookmark[];
   setVideoBookmarks: React.Dispatch<React.SetStateAction<VideoBookmark[]>>;
   excludeVideoId: string | undefined;
-  isVideoListAcive: boolean;
+  // isVideoListAcive: boolean;
 };
 
-const YoutubePage = ({
+const BookmarkedVideosList = ({
   videoBookmarks,
   setVideoBookmarks,
   excludeVideoId,
-  isVideoListAcive,
-}: YoutubePageProps) => {
+}: // isVideoListAcive,
+BookmarkedVideosListProps) => {
   return (
-    <div className="">
+    <>
+      <h3 className="font-medium text-xl mb-2">Bookmarked Videos</h3>
       {videoBookmarks.length > 0 ? (
         videoBookmarks.map(({ id, title, url }) => (
-          <VideoBookmarkItem
+          <BookmarkedVideoItem
             key={id}
             videoId={id}
             videoTitle={title}
@@ -27,7 +28,6 @@ const YoutubePage = ({
             videoBookmarks={videoBookmarks}
             setVideoBookmarks={setVideoBookmarks}
             excludeVideoId={excludeVideoId}
-            isVideoListActive={isVideoListAcive}
           />
         ))
       ) : (
@@ -35,8 +35,8 @@ const YoutubePage = ({
           <h2 className="text-2xl mt-2 mb-3">No bookmarks to show</h2>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
-export default YoutubePage;
+export default BookmarkedVideosList;

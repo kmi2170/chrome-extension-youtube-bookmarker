@@ -3,19 +3,19 @@ import React from 'react';
 
 import { VideoBookmark } from '../../../chrome-api/types';
 
-type TimeStampsProps = {
+type BookmarkedTimestampsProps = {
   tabId: number | null;
   videoBookmarks: VideoBookmark[];
   videoId: string | null;
   setVideoBookmarks: React.Dispatch<React.SetStateAction<VideoBookmark[]>>;
 };
 
-const TimeStamps = ({
+const BookmarkedTimestamps = ({
   tabId,
   videoBookmarks,
   videoId,
   setVideoBookmarks,
-}: TimeStampsProps) => {
+}: BookmarkedTimestampsProps) => {
   const videoBookmark = videoBookmarks.filter((bookmark) => {
     if (bookmark.id === videoId) {
       return bookmark;
@@ -53,12 +53,12 @@ const TimeStamps = ({
   return (
     <>
       {timeStamps?.length > 0 ? (
-        <div className="mt-2 mb-4 flex flex-col justify-center bg-gray-300">
+        <div className="mt-2 mb-4 flex flex-col justify-center">
           {timeStamps.map(({ time, desc }) => {
             return (
               <div
                 key={desc}
-                className="ml-8 mr-8 mb-1 flex justify-between items-center bg-pink-100 rounded-full hover:bg-pink-200"
+                className="ml-8 mr-8 mb-1 flex justify-between items-center  rounded-full border-2 border-pink-300 hover:bg-pink-200"
               >
                 <a data-tip="Play" data-for={`play-${desc}`} className="ml-6">
                   <img
@@ -77,7 +77,7 @@ const TimeStamps = ({
                   effect="float"
                 />
 
-                <div className="pt-1 text-xl ">{desc}</div>
+                <div className="pt-1 font-bold text-xl ">{desc}</div>
 
                 <a
                   data-tip="Delete"
@@ -112,4 +112,4 @@ const TimeStamps = ({
   );
 };
 
-export default TimeStamps;
+export default BookmarkedTimestamps;

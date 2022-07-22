@@ -1,12 +1,10 @@
 import React from 'react';
 
 import useChromeApi from '../chrome-api/hook';
-// import VideoBookmarkItem from './popup-parts/videoBookmarkItem';
-// import TimeStamps from './popup-parts/timeStamps';
 import NotYoutubePage from './popup-components/notYoutube';
+import CurrentVideo from './popup-components/currentVideo';
+import BookmarkedVidoList from './popup-components/bookmarkedVideosList';
 import './popup.css';
-import YoutubePage from './popup-components/youtubePage';
-import YoutubeWatchPage from './popup-components/youtubeWatchPage';
 
 const Popup = () => {
   const {
@@ -36,7 +34,7 @@ const Popup = () => {
       </h1>
 
       {isYoutubeWatchPage && (
-        <YoutubeWatchPage
+        <CurrentVideo
           tabId={activeTabId as number}
           isVideoBookmarked={isCurrentVideoBookmarked}
           videoId={currentVideoId as string}
@@ -47,11 +45,10 @@ const Popup = () => {
         />
       )}
 
-      <YoutubePage
+      <BookmarkedVidoList
         videoBookmarks={currentVideoBookmarks}
         setVideoBookmarks={setCurrentVideoBookmarks}
         excludeVideoId={isYoutubePage && (currentVideoId as string)}
-        isVideoListAcive={!isYoutubeWatchPage}
       />
     </div>
   );
