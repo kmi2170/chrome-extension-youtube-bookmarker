@@ -18,7 +18,7 @@ export const fetchBookmarks: (key: string) => Promise<VideoBookmark[]> = (
 ) => {
   return new Promise((resolve) => {
     chrome.storage.sync.get([key], (obj) => {
-      resolve(obj[key] ? JSON.parse(obj[key]) : []);
+      resolve(obj[key] ? (JSON.parse(obj[key]) as VideoBookmark[]) : []);
     });
   });
 };

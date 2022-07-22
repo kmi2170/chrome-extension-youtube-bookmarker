@@ -1,4 +1,4 @@
-import { getTime, css, removeCharsFromString } from '../utils';
+import { getTime, removeCharsFromString } from '../utils';
 import { VideoBookmark } from '../chrome-api/types';
 import {
   storeVideoBookmarks,
@@ -8,11 +8,6 @@ import {
   // showAllStorage,
   // clearAllStorage,
 } from './contentScript-utils';
-
-const bookmarkBtnStyle = {
-  height: '100%',
-  width: 'auto',
-};
 
 (() => {
   const key_ytbookmark = 'yt-bookmarks';
@@ -75,7 +70,7 @@ const bookmarkBtnStyle = {
     storeVideoBookmarks(
       key_ytbookmark,
       newVideoBookmarks.sort((a, b) => +a.createdAt - +b.createdAt)
-    );
+    ).catch((error) => console.error(error));
   };
 
   const newVideoLoaded = async () => {
@@ -91,7 +86,8 @@ const bookmarkBtnStyle = {
       bookmarkBtn.src = chrome.runtime.getURL(
         'assets/icon-add-bookmark-96.png'
       );
-      css(bookmarkBtn, bookmarkBtnStyle);
+      bookmarkBtn.style.height = '100%';
+      bookmarkBtn.style.width = 'auto';
 
       youtubePlayer = document.getElementsByClassName(
         'video-stream'
@@ -104,33 +100,47 @@ const bookmarkBtnStyle = {
     }
   };
 
+  type MessageObj = {
+    type: string;
+    value: string | number;
+    videoId: string;
+    videoTitle: string;
+    videoUrl: string;
+  };
+
   chrome.runtime.onMessage.addListener((obj, sender, response) => {
-    const { type, value, videoId, videoTitle, videoUrl } = obj;
+    const { type, value, videoId, videoTitle, videoUrl } = obj as MessageObj;
 
     // clearAllStorage();
     // showAllStorage();
 
     if (type === 'NEW') {
       currentVideoId = videoId;
-      // currentVideoTitle = videoTitle;
       currentVideoTitle = videoTitle;
       currentVideoUrl = videoUrl;
     } else if (type === 'PLAY') {
-      youtubePlayer.currentTime = value;
+      youtubePlayer.currentTime = value as number;
     } else if (type === 'DELETE_TIMESTAMP') {
       currentVideoBookmarks = deleteTimestampHandler(
-        value,
+        value as number,
         currentVideoId,
         currentVideoBookmarks
       );
-      storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks);
+      storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks).catch(
+        (error) => console.error(error)
+      );
       response(currentVideoBookmarks);
     } else if (type === 'DELETE_VIDEO') {
-      currentVideoBookmarks = deleteVideoHandler(value, currentVideoBookmarks);
-      storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks);
+      currentVideoBookmarks = deleteVideoHandler(
+        value as string,
+        currentVideoBookmarks
+      );
+      storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks).catch(
+        (error) => console.error(error)
+      );
       response(currentVideoBookmarks);
     }
   });
 
-  newVideoLoaded();
+  newVideoLoaded().catch((error) => console.error(error));
 })();

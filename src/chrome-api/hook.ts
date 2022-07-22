@@ -29,7 +29,7 @@ const useChromeApi = () => {
 
     chrome.storage.sync.get([key_ytbookmark], (data) => {
       const videoBookmarks = data[key_ytbookmark]
-        ? JSON.parse(data[key_ytbookmark])
+        ? (JSON.parse(data[key_ytbookmark]) as VideoBookmark[])
         : [];
 
       setCurrentVideoBookmarks(videoBookmarks);
@@ -46,7 +46,7 @@ const useChromeApi = () => {
       setCurrentVideoTitle(
         removeCharsFromString(activeTab.title as string, '- YouTube')
       );
-      setCurrentVideoUrl(activeTab.url as string);
+      setCurrentVideoUrl(activeTab.url);
       return;
     }
 
@@ -54,7 +54,7 @@ const useChromeApi = () => {
   };
 
   useEffect(() => {
-    getCurrentVideoInfo();
+    getCurrentVideoInfo().catch((error) => console.error(error));
   }, []);
 
   return {
