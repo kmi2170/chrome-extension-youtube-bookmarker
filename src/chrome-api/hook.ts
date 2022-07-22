@@ -29,7 +29,7 @@ const useChromeApi = () => {
 
     chrome.storage.sync.get([key_ytbookmark], (data) => {
       const videoBookmarks = data[key_ytbookmark]
-        ? (JSON.parse(data[key_ytbookmark]) as VideoBookmark[])
+        ? (JSON.parse(data[key_ytbookmark] as string) as VideoBookmark[])
         : [];
 
       setCurrentVideoBookmarks(videoBookmarks);

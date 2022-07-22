@@ -18,8 +18,11 @@ import {
   let currentVideoUrl = '';
   let currentVideoBookmarks: VideoBookmark[] | [] = [];
 
-  const addNewBookmarkEventHandler = async () => {
-    const currentVideoBookmarks = await fetchBookmarks(key_ytbookmark);
+  const addNewBookmarkEventHandler = () => {
+    fetchBookmarks(key_ytbookmark)
+      .then((data) => (currentVideoBookmarks = data))
+      .catch((error) => console.error(error));
+
     const currentTime = Math.round(youtubePlayer.currentTime);
     const isCurrentVideoExists =
       currentVideoBookmarks.filter((bookmark) => bookmark.id == currentVideoId)
@@ -74,7 +77,11 @@ import {
   };
 
   const newVideoLoaded = async () => {
-    currentVideoBookmarks = await fetchBookmarks(key_ytbookmark);
+    try {
+      currentVideoBookmarks = await fetchBookmarks(key_ytbookmark);
+    } catch (error) {
+      console.error(error);
+    }
     console.log('fetch curretVideoBookmarks', currentVideoBookmarks);
 
     const bookmarkBtnExists =
@@ -135,6 +142,7 @@ import {
         value as string,
         currentVideoBookmarks
       );
+      // storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks);
       storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks).catch(
         (error) => console.error(error)
       );
