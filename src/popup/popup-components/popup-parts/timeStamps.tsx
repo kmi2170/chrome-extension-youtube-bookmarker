@@ -40,9 +40,9 @@ const Timestamps = ({
       return bookmark;
     });
 
-    sendMessage(tabId as number, 'DELETE_TIMESTAMP', t);
-
     setVideoBookmarks(newVideoBookmarks);
+
+    sendMessage(tabId as number, 'DELETE_TIMESTAMP', t);
   };
 
   return (
@@ -100,7 +100,7 @@ const Timestamps = ({
         </div>
       ) : (
         <div className="flex justify-center ">
-          <h2 className="text-2xl mt-2">No Timestamp to Show</h2>
+          <h2 className="text-2xl mt-2">No timestamp to show</h2>
         </div>
       )}
     </>
