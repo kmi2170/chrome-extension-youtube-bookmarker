@@ -1,6 +1,12 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import {
+  cleanup,
+  fireEvent,
+  prettyDOM,
+  render,
+  screen,
+} from '@testing-library/react';
 
 import VideosList, { VideosListProps } from './videosList';
 import { mockVideoBookmarks } from '../../assets/mockData';
@@ -81,5 +87,17 @@ describe('VideoList', () => {
         );
       }
     );
+  });
+
+  const message = 'No bookmarks to show';
+  describe('video bookmark is empty', () => {
+    it(`display "${message}"`, () => {
+      const mockSetState = jest.fn();
+      setup({ ...mockProps(mockSetState), videoBookmarks: [] });
+
+      const msg = screen.getByText(message);
+      console.log(prettyDOM(msg));
+      expect(msg).toBeInTheDocument();
+    });
   });
 });
