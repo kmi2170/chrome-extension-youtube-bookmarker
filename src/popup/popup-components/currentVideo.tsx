@@ -1,7 +1,7 @@
 import React from 'react';
 import { VideoBookmark } from '../../chrome-api/types';
-import BookmarkedTimestamps from './popup-parts/bookmarkedTimeStamps';
-import BookmarkedVideoItem from './popup-parts/bookmarkedVideoItem';
+import Timestamps from './popup-parts/timeStamps';
+import VideoItem from './popup-parts/videoItem';
 
 export type CurrentVideoProps = {
   tabId: number;
@@ -27,7 +27,7 @@ const CurrentVideo = ({
       <h3 className="font-medium text-xl mb-2">Current Video</h3>
       {isVideoBookmarked ? (
         <div className="w-full flex flex-col justify-center">
-          <BookmarkedVideoItem
+          <VideoItem
             tabId={tabId}
             videoId={videoId}
             videoTitle={videoTitle}
@@ -36,7 +36,7 @@ const CurrentVideo = ({
             setVideoBookmarks={setVideoBookmarks}
             currentVideo
           />
-          <BookmarkedTimestamps
+          <Timestamps
             tabId={tabId}
             videoId={videoId}
             videoBookmarks={videoBookmarks}

@@ -3,7 +3,7 @@ import React from 'react';
 import useChromeApi from '../chrome-api/hook';
 import NotYoutubePage from './popup-components/notYoutube';
 import CurrentVideo from './popup-components/currentVideo';
-import BookmarkedVidoList from './popup-components/bookmarkedVideosList';
+import VideosList from './popup-components/videosList';
 import './popup.css';
 
 const Popup = () => {
@@ -45,7 +45,8 @@ const Popup = () => {
         />
       )}
 
-      <BookmarkedVidoList
+      <VideosList
+        tabId={activeTabId as number}
         videoBookmarks={currentVideoBookmarks}
         setVideoBookmarks={setCurrentVideoBookmarks}
         excludeVideoId={isYoutubePage && (currentVideoId as string)}

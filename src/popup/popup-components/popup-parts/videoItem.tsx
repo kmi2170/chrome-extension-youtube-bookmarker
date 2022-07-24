@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
+import { sendMessage } from '../../../chrome-api/sendMessage';
 
 import { VideoBookmark } from '../../../chrome-api/types';
 
-type BookmarkedVideoItemProps = {
+export type VideoItemProps = {
   tabId: number;
   currentVideo?: boolean;
   excludeVideoId?: string;
@@ -14,7 +15,7 @@ type BookmarkedVideoItemProps = {
   setVideoBookmarks: React.Dispatch<React.SetStateAction<VideoBookmark[]>>;
 };
 
-const BookmarkedVideoItem = ({
+const VideoItem = ({
   tabId,
   currentVideo,
   excludeVideoId = undefined,
@@ -23,16 +24,13 @@ const BookmarkedVideoItem = ({
   videoTitle,
   videoBookmarks,
   setVideoBookmarks,
-}: BookmarkedVideoItemProps) => {
+}: VideoItemProps) => {
   const handleDelete = (vId: string) => {
     console.log('delete', vId, tabId);
     const newVideoBookmarks = videoBookmarks.filter(({ id }) => id !== vId);
     setVideoBookmarks(newVideoBookmarks);
 
-    chrome.tabs.sendMessage(tabId, {
-      type: 'DELETE_VIDEO',
-      value: vId,
-    });
+    sendMessage(tabId, 'DELETE_VIDEO', vId);
   };
 
   const baseClass =
@@ -94,4 +92,4 @@ const BookmarkedVideoItem = ({
   );
 };
 
-export default BookmarkedVideoItem;
+export default VideoItem;

@@ -2,20 +2,21 @@ import ReactTooltip from 'react-tooltip';
 import React from 'react';
 
 import { VideoBookmark } from '../../../chrome-api/types';
+import { sendMessage } from '../../../chrome-api/sendMessage';
 
-type BookmarkedTimestampsProps = {
+type TimestampsProps = {
   tabId: number | null;
   videoBookmarks: VideoBookmark[];
   videoId: string | null;
   setVideoBookmarks: React.Dispatch<React.SetStateAction<VideoBookmark[]>>;
 };
 
-const BookmarkedTimestamps = ({
+const Timestamps = ({
   tabId,
   videoBookmarks,
   videoId,
   setVideoBookmarks,
-}: BookmarkedTimestampsProps) => {
+}: TimestampsProps) => {
   const videoBookmark = videoBookmarks.filter((bookmark) => {
     if (bookmark.id === videoId) {
       return bookmark;
@@ -25,10 +26,7 @@ const BookmarkedTimestamps = ({
   const timeStamps = videoBookmark[0]?.timestamp;
 
   const handlePlay = (t: number) => {
-    chrome.tabs.sendMessage(tabId as number, {
-      type: 'PLAY',
-      value: t,
-    });
+    sendMessage(tabId as number, 'PLAY', t);
   };
 
   const handleDelete = (t: number) => {
@@ -42,10 +40,7 @@ const BookmarkedTimestamps = ({
       return bookmark;
     });
 
-    chrome.tabs.sendMessage(tabId as number, {
-      type: 'DELETE_TIMESTAMP',
-      value: t,
-    });
+    sendMessage(tabId as number, 'DELETE_TIMESTAMP', t);
 
     setVideoBookmarks(newVideoBookmarks);
   };
@@ -112,4 +107,4 @@ const BookmarkedTimestamps = ({
   );
 };
 
-export default BookmarkedTimestamps;
+export default Timestamps;

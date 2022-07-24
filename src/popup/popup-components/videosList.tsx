@@ -1,27 +1,28 @@
 import React from 'react';
 import { VideoBookmark } from '../../chrome-api/types';
-import BookmarkedVideoItem from './popup-parts/bookmarkedVideoItem';
+import VideoItem from './popup-parts/videoItem';
 
-export type BookmarkedVideosListProps = {
+export type VideosListProps = {
+  tabId: number;
   videoBookmarks: VideoBookmark[];
   setVideoBookmarks: React.Dispatch<React.SetStateAction<VideoBookmark[]>>;
   excludeVideoId: string | undefined;
-  // isVideoListAcive: boolean;
 };
 
-const BookmarkedVideosList = ({
+const VideosList = ({
+  tabId,
   videoBookmarks,
   setVideoBookmarks,
   excludeVideoId,
-}: // isVideoListAcive,
-BookmarkedVideosListProps) => {
+}: VideosListProps) => {
   return (
     <>
       <h3 className="font-medium text-xl mb-2">Bookmarked Videos</h3>
       {videoBookmarks.length > 0 ? (
         videoBookmarks.map(({ id, title, url }) => (
-          <BookmarkedVideoItem
+          <VideoItem
             key={id}
+            tabId={tabId}
             videoId={id}
             videoTitle={title}
             videoUrl={url}
@@ -39,4 +40,4 @@ BookmarkedVideosListProps) => {
   );
 };
 
-export default BookmarkedVideosList;
+export default VideosList;
