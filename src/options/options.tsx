@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { fetchOptions } from '../chrome-api/fetchOptions';
+import { fetchOptions, storeOptoins } from '../chrome-api/storage/options';
 import './options.css';
 
 const key = 'yt-bookmarks-options';
@@ -8,13 +8,12 @@ const key = 'yt-bookmarks-options';
 const Options = () => {
   const [isAllPages, setIsAllPages] = useState(true);
 
-  // chrome.storage.sync.remove([key]);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsAllPages(e.target.checked);
 
-    chrome.storage.sync.set({ [key]: { isAllPages: e.target.checked } }, () => {
-      console.log('options are saved');
-    });
+    storeOptoins(key, e.target.checked)
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {

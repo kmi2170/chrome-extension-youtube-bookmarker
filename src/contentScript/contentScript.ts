@@ -1,13 +1,13 @@
 import { getTime, removeCharsFromString } from '../utils';
 import { VideoBookmark } from '../chrome-api/types';
 import {
-  storeVideoBookmarks,
-  fetchBookmarks,
   deleteVideoHandler,
   deleteTimestampHandler,
-  // showAllStorage,
-  // clearAllStorage,
 } from './contentScript-utils';
+import {
+  storeVideoBookmarks,
+  fetchBookmarks,
+} from '../chrome-api/storage/bookmarks';
 
 (() => {
   const key_ytbookmark = 'yt-bookmarks';
@@ -115,9 +115,6 @@ import {
 
   chrome.runtime.onMessage.addListener((obj, sender, response) => {
     const { type, value, videoId, videoTitle, videoUrl } = obj as MessageObj;
-
-    // clearAllStorage();
-    // showAllStorage();
 
     if (type === 'NEW') {
       currentVideoId = videoId;

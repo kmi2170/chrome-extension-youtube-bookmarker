@@ -5,7 +5,7 @@ import NotYoutubePage from './popup-components/notYoutube';
 import CurrentVideo from './popup-components/currentVideo';
 import VideosList from './popup-components/videosList';
 import './popup.css';
-import { fetchOptions } from '../chrome-api/fetchOptions';
+import { fetchOptions } from '../chrome-api/storage/options';
 
 const key = 'yt-bookmarks-options';
 
@@ -29,7 +29,6 @@ const Popup = () => {
       .then((data) => setIsAllPages(data))
       .catch((error) => console.error(error));
   }, []);
-  console.log({ isAllPages });
 
   if (!isYoutubePage && !isAllPages) {
     return <NotYoutubePage />;

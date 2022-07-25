@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { removeCharsFromString } from '../utils';
 import { getActiveTabURL } from './getActiveTabURL';
+import { fetchBookmarks } from './storage/bookmarks';
 import { VideoBookmark } from './types';
 
 const useChromeApi = () => {
@@ -27,13 +28,9 @@ const useChromeApi = () => {
       setIsYoutubePage(false);
     }
 
-    chrome.storage.sync.get([key_ytbookmark], (data) => {
-      const videoBookmarks = data[key_ytbookmark]
-        ? (JSON.parse(data[key_ytbookmark] as string) as VideoBookmark[])
-        : [];
-
-      setCurrentVideoBookmarks(videoBookmarks);
-    });
+    fetchBookmarks(key_ytbookmark)
+      .then((data) => setCurrentVideoBookmarks(data))
+      .catch((error) => console.error(error));
 
     if (activeTab.url?.includes('youtube.com/watch')) {
       const queryParameters = activeTab.url?.split('?')[1];
