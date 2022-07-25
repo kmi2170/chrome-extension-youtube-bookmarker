@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import useChromeApi from '../chrome-api/hook';
 import NotYoutubePage from './popup-components/notYoutube';
 import CurrentVideo from './popup-components/currentVideo';
 import VideosList from './popup-components/videosList';
 import './popup.css';
+import { fetchOptions } from '../chrome-api/fetchOptions';
+
+const key = 'yt-bookmarks-options';
 
 const Popup = () => {
+  const [isAllPages, setIsAllPages] = useState(false);
+
   const {
     activeTabId,
     currentVideoId,
@@ -19,7 +24,14 @@ const Popup = () => {
   } = useChromeApi();
   console.log(currentVideoBookmarks);
 
-  if (!isYoutubePage) {
+  useEffect(() => {
+    fetchOptions(key)
+      .then((data) => setIsAllPages(data))
+      .catch((error) => console.error(error));
+  }, []);
+  console.log({ isAllPages });
+
+  if (!isYoutubePage && !isAllPages) {
     return <NotYoutubePage />;
   }
 
@@ -49,7 +61,7 @@ const Popup = () => {
         tabId={activeTabId as number}
         videoBookmarks={currentVideoBookmarks}
         setVideoBookmarks={setCurrentVideoBookmarks}
-        excludeVideoId={isYoutubePage && (currentVideoId as string)}
+        excludeVideoId={isYoutubePage ? (currentVideoId as string) : undefined}
       />
     </div>
   );

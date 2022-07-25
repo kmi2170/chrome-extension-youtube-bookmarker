@@ -76,12 +76,10 @@ import {
     ).catch((error) => console.error(error));
   };
 
-  const newVideoLoaded = async () => {
-    try {
-      currentVideoBookmarks = await fetchBookmarks(key_ytbookmark);
-    } catch (error) {
-      console.error(error);
-    }
+  const newVideoLoaded = () => {
+    fetchBookmarks(key_ytbookmark)
+      .then((data) => (currentVideoBookmarks = data))
+      .catch((error) => console.error(error));
     console.log('fetch curretVideoBookmarks', currentVideoBookmarks);
 
     const bookmarkBtnExists =
@@ -150,5 +148,5 @@ import {
     }
   });
 
-  newVideoLoaded().catch((error) => console.error(error));
+  newVideoLoaded();
 })();

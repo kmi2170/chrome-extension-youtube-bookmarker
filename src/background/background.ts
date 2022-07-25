@@ -1,4 +1,5 @@
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  let obj = {};
   if (
     changeInfo.status === 'complete' &&
     tab.url &&
@@ -10,13 +11,17 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     const videoTitle = tab.title;
     const videoUrl = tab.url;
 
-    const obj = {
+    obj = {
       type: 'NEW',
       videoId,
       videoTitle,
       videoUrl,
     };
-
-    chrome.tabs.sendMessage(tabId, obj, () => console.log('send Message', obj));
+  } else {
+    obj = {
+      type: 'ALL_PAGES',
+    };
   }
+
+  chrome.tabs.sendMessage(tabId, obj, () => console.log('send Message', obj));
 });

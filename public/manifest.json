@@ -10,7 +10,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://*.youtube.com/*"
+        "https://*/*"
       ],
       "js": [
         "contentScript.js"
@@ -37,7 +37,7 @@
         "assets/icon-play.png"
       ],
       "matches": [
-        "https://*.youtube.com/*"
+        "https://*/*"
       ]
     }
   ],

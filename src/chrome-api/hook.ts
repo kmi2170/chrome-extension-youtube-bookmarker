@@ -21,11 +21,11 @@ const useChromeApi = () => {
   const getCurrentVideoInfo = async () => {
     const activeTab = await getActiveTabURL();
 
-    if (!activeTab.url?.includes('youtube.com')) {
+    if (activeTab.url?.includes('youtube.com')) {
+      setIsYoutubePage(true);
+    } else {
       setIsYoutubePage(false);
-      return;
     }
-    setIsYoutubePage(true);
 
     chrome.storage.sync.get([key_ytbookmark], (data) => {
       const videoBookmarks = data[key_ytbookmark]
