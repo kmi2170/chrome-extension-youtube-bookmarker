@@ -11,8 +11,8 @@ import {
 } from '../../assets/mockData';
 import { sendMessage } from '../../chrome-api/sendMessage';
 
-// jest.mock('../../chrome-api/sendMessage');
 jest.mock('../../chrome-api/sendMessage', () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     __esModule: true,
     ...jest.requireActual('../../chrome-api/sendMessage'),
@@ -46,7 +46,7 @@ describe('VideoList', () => {
     const mockSetState = jest.fn();
     setup(mockProps(mockSetState));
 
-    const title = screen.getByText(videoTitles[0] as string);
+    const title = screen.getByText(videoTitles[0]);
     expect(title).toBeInTheDocument();
   });
 
@@ -60,8 +60,7 @@ describe('VideoList', () => {
       const mockSetState = jest.fn();
       setup(mockProps(mockSetState));
 
-      const text = screen.getByText(desc);
-
+      const text = screen.getByText(desc as string);
       expect(text).toBeInTheDocument();
     });
   });
@@ -74,18 +73,7 @@ describe('VideoList', () => {
     const playIcons = screen.getAllByRole('img', { name: /play/i });
     fireEvent.click(playIcons[0]);
 
-    expect(sendMessage).toHaveBeenCalledWith(
-      1,
-      'PLAY',
-      timeStampTime as number
-    );
-    // expect(sendMessage).toHaveBeenCalledWith(
-    //   expect.arrayContaining([
-    //     expect.objectContaining({
-    //       t: timeStampTime as number,
-    //     }),
-    //   ])
-    // );
+    expect(sendMessage).toHaveBeenCalledWith(1, 'PLAY', timeStampTime);
   });
 
   const timeStampDesc = timeStampsV0[0].desc;
@@ -97,11 +85,7 @@ describe('VideoList', () => {
     fireEvent.click(deleteIcons[0]);
 
     expect(mockSetState).not.toHaveBeenCalledWith(
-      expect.arrayContaining([
-        expect.objectContaining({
-          desc: timeStampDesc as string,
-        }),
-      ])
+      expect.arrayContaining([expect.objectContaining({ desc: timeStampDesc })])
     );
   });
 
@@ -132,11 +116,7 @@ describe('VideoList', () => {
     fireEvent.click(deleteIcons[0]);
 
     expect(mockSetState).not.toHaveBeenCalledWith(
-      expect.arrayContaining([
-        expect.objectContaining({
-          id: videoId as string,
-        }),
-      ])
+      expect.arrayContaining([expect.objectContaining({ id: videoId })])
     );
   });
 });

@@ -3,7 +3,11 @@ import '@testing-library/jest-dom';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 
 import VideosList, { VideosListProps } from './videosList';
-import { mockVideoBookmarks } from '../../assets/mockData';
+import {
+  mockVideoBookmarks,
+  videoIds,
+  videoTitles,
+} from '../../assets/mockData';
 
 jest.mock('../../chrome-api/sendMessage');
 
@@ -18,18 +22,6 @@ const mockProps = (mockFn: jest.Mock<any, any>) => ({
   videoBookmarks: mockVideoBookmarks,
   setVideoBookmarks: mockFn,
 });
-
-const videoIds = [
-  mockVideoBookmarks[0].id,
-  mockVideoBookmarks[1].id,
-  mockVideoBookmarks[2].id,
-];
-
-const videoTitles = [
-  mockVideoBookmarks[0].title,
-  mockVideoBookmarks[1].title,
-  mockVideoBookmarks[2].title,
-];
 
 describe('VideoList', () => {
   afterEach(() => {
@@ -71,7 +63,6 @@ describe('VideoList', () => {
         index++;
         fireEvent.click(deleteIcon);
 
-        expect(mockSetState).toHaveBeenCalledTimes(1);
         expect(mockSetState).not.toHaveBeenCalledWith(
           expect.arrayContaining([
             expect.objectContaining({
