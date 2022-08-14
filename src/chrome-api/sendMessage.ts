@@ -3,5 +3,7 @@ export const sendMessage = (
   type: string,
   value: string | number
 ) => {
-  chrome.tabs.sendMessage(tabId, { type, value });
+  chrome.tabs.sendMessage(tabId, { type, value }, () => {
+    console.log('sendMessage', type, value);
+  });
 };

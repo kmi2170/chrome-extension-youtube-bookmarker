@@ -26,11 +26,10 @@ const VideoItem = ({
   setVideoBookmarks,
 }: VideoItemProps) => {
   const handleDelete = (vId: string) => {
-    console.log('delete', vId, tabId);
     const newVideoBookmarks = videoBookmarks.filter(({ id }) => id !== vId);
-    setVideoBookmarks(newVideoBookmarks);
 
     sendMessage(tabId, 'DELETE_VIDEO', vId);
+    setVideoBookmarks(newVideoBookmarks);
   };
 
   const baseClass =
@@ -66,6 +65,7 @@ const VideoItem = ({
             effect="float"
             disable={currentVideo}
           />
+
           <a
             data-tip="Delete"
             data-for={`delete-video-${videoId}`}

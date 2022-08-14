@@ -7,20 +7,20 @@ import { VideoBookmark } from './types';
 
 const useChromeApi = () => {
   const key_ytbookmark = 'yt-bookmarks';
+
   const [activeTabId, setActiveTabId] = useState<number | null>(null);
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
   const [currentVideoTitle, setCurrentVideoTitle] = useState('');
   const [currentVideoUrl, setCurrentVideoUrl] = useState('');
-
   const [currentVideoBookmarks, setCurrentVideoBookmarks] = useState<
     VideoBookmark[]
   >([]);
-
   const [isYoutubePage, setIsYoutubePage] = useState(false);
   const [isYoutubeWatchPage, setIsYoutubeWatchPage] = useState(false);
 
   const getCurrentVideoInfo = async () => {
     const activeTab = await getActiveTabURL();
+    setActiveTabId(activeTab.id as number);
 
     if (activeTab.url?.includes('youtube.com')) {
       setIsYoutubePage(true);
@@ -39,7 +39,6 @@ const useChromeApi = () => {
 
       setIsYoutubeWatchPage(true);
       setCurrentVideoId(videoId);
-      setActiveTabId(activeTab.id as number);
       setCurrentVideoTitle(
         removeCharsFromString(activeTab.title as string, '- YouTube')
       );

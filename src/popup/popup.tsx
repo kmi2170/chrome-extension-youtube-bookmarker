@@ -22,6 +22,7 @@ const Popup = () => {
     isYoutubeWatchPage,
     setCurrentVideoBookmarks,
   } = useChromeApi();
+
   console.log(currentVideoBookmarks);
 
   useEffect(() => {

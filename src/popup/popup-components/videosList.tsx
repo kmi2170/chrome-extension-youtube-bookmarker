@@ -17,7 +17,15 @@ const VideosList = ({
 }: VideosListProps) => {
   return (
     <>
-      <h3 className="font-medium text-xl mb-2">Bookmarked Videos</h3>
+      <h3 className="font-medium text-xl mb-2">
+        {videoBookmarks.length > 0 && (
+          <span>
+            {excludeVideoId ? videoBookmarks.length - 1 : videoBookmarks.length}{' '}
+            Bookmarked Videos
+          </span>
+        )}
+      </h3>
+
       {videoBookmarks.length > 0 ? (
         videoBookmarks.map(({ id, title, url }) => (
           <VideoItem

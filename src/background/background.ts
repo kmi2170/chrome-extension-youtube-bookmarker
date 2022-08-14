@@ -23,5 +23,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     };
   }
 
-  chrome.tabs.sendMessage(tabId, obj, () => console.log('send Message', obj));
+  chrome.tabs.sendMessage(tabId, obj, () =>
+    console.log('send Message', tabId, obj)
+  );
 });

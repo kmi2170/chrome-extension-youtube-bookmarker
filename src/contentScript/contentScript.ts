@@ -137,7 +137,6 @@ import {
         value as string,
         currentVideoBookmarks
       );
-      // storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks);
       storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks).catch(
         (error) => console.error(error)
       );
