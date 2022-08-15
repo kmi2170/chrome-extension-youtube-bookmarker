@@ -12,8 +12,18 @@ export const showStorage = () => {
   chrome.storage.sync.get(null, (all) => console.log(all));
 };
 
-export const storeVideoBookmarks = (key: string, bookmarks: VideoBookmark[]) =>
-  chrome.storage.sync.set({ [key]: JSON.stringify(bookmarks) });
+export const storeVideoBookmarks: (
+  key: string,
+  bookmarks: VideoBookmark[]
+) => Promise<void> = (key, bookmarks) => {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.set({ [key]: JSON.stringify(bookmarks) }, () => {
+      chrome.runtime.lastError
+        ? reject(Error(chrome.runtime.lastError.message))
+        : resolve();
+    });
+  });
+};
 
 export const fetchBookmarks: (key: string) => Promise<VideoBookmark[]> = (
   key

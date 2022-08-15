@@ -3,6 +3,9 @@ import React from 'react';
 
 import { VideoBookmark } from '../../../chrome-api/types';
 import { sendMessage } from '../../../chrome-api/sendMessage';
+import { storeVideoBookmarks } from '../../../chrome-api/storage/bookmarks';
+
+const key_ytbookmark = 'yt-bookmarks';
 
 type TimestampsProps = {
   tabId: number | null;
@@ -39,10 +42,10 @@ const Timestamps = ({
       }
       return bookmark;
     });
+    // sendMessage(tabId as number, 'DELETE_TIMESTAMP', t);
+    storeVideoBookmarks(key_ytbookmark, newVideoBookmarks);
 
     setVideoBookmarks(newVideoBookmarks);
-
-    sendMessage(tabId as number, 'DELETE_TIMESTAMP', t);
   };
 
   return (
