@@ -28,7 +28,7 @@ const CurrentVideo = ({
       {isVideoBookmarked ? (
         <div className="w-full flex flex-col justify-center">
           <VideoItem
-            tabId={tabId}
+            // tabId={tabId}
             videoId={videoId}
             videoTitle={videoTitle}
             videoUrl={videoUrl}

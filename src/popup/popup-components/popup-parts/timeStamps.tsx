@@ -43,7 +43,9 @@ const Timestamps = ({
       return bookmark;
     });
     // sendMessage(tabId as number, 'DELETE_TIMESTAMP', t);
-    storeVideoBookmarks(key_ytbookmark, newVideoBookmarks);
+    storeVideoBookmarks(key_ytbookmark, newVideoBookmarks).catch((error) =>
+      console.error(error)
+    );
 
     setVideoBookmarks(newVideoBookmarks);
   };

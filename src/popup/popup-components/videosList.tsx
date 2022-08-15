@@ -30,7 +30,7 @@ const VideosList = ({
         videoBookmarks.map(({ id, title, url }) => (
           <VideoItem
             key={id}
-            tabId={tabId}
+            // tabId={tabId}
             videoId={id}
             videoTitle={title}
             videoUrl={url}

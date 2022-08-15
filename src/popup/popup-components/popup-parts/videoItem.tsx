@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
-import { sendMessage } from '../../../chrome-api/sendMessage';
+// import { sendMessage } from '../../../chrome-api/sendMessage';
 import { storeVideoBookmarks } from '../../../chrome-api/storage/bookmarks';
 
 import { VideoBookmark } from '../../../chrome-api/types';
@@ -8,7 +8,7 @@ import { VideoBookmark } from '../../../chrome-api/types';
 const key_ytbookmark = 'yt-bookmarks';
 
 export type VideoItemProps = {
-  tabId: number;
+  // tabId: number;
   currentVideo?: boolean;
   excludeVideoId?: string;
   videoId: string;
@@ -19,7 +19,7 @@ export type VideoItemProps = {
 };
 
 const VideoItem = ({
-  tabId,
+  // tabId,
   currentVideo,
   excludeVideoId = undefined,
   videoId,
@@ -30,7 +30,9 @@ const VideoItem = ({
 }: VideoItemProps) => {
   const handleDelete = (vId: string) => {
     const newVideoBookmarks = videoBookmarks.filter(({ id }) => id !== vId);
-    storeVideoBookmarks(key_ytbookmark, newVideoBookmarks);
+    storeVideoBookmarks(key_ytbookmark, newVideoBookmarks).catch((error) =>
+      console.error(error)
+    );
 
     // sendMessage(tabId, 'DELETE_VIDEO', vId);
     setVideoBookmarks(newVideoBookmarks);
