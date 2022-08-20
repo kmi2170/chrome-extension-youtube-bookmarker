@@ -7,8 +7,10 @@ export const deleteTimestampHandler = (
 ) => {
   const newVideoBookmarks = videoBookmarks.map((bookmark) => {
     if (bookmark.id === videoId) {
-      const newTimestamp = bookmark.timestamp.filter(({ time }) => time !== t);
-      return { ...bookmark, timestamp: newTimestamp };
+      const newTimestamps = bookmark.timestamps.filter(
+        ({ time }) => time !== t
+      );
+      return { ...bookmark, timestamp: newTimestamps };
     }
     return bookmark;
   });

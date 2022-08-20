@@ -10,6 +10,9 @@ import {
   timeStampsV0,
 } from '../../assets/mockData';
 import { sendMessage } from '../../chrome-api/sendMessage';
+import { storeVideoBookmarks } from '../../chrome-api/storage/bookmarks';
+import { VideoBookmark } from '../../chrome-api/types';
+import { key_ytbookmark } from '../../assets';
 
 jest.mock('../../chrome-api/sendMessage', () => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -17,6 +20,14 @@ jest.mock('../../chrome-api/sendMessage', () => {
     __esModule: true,
     ...jest.requireActual('../../chrome-api/sendMessage'),
     sendMessage: jest.fn(),
+  };
+});
+jest.mock('../../chrome-api/storage/bookmarks', () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return {
+    __esModule: true,
+    ...jest.requireActual('../../chrome-api/storage/bookmarks'),
+    storeVideoBookmarks: jest.fn(() => Promise.resolve()),
   };
 });
 
@@ -77,6 +88,7 @@ describe('VideoList', () => {
   });
 
   const timeStampDesc = timeStampsV0[0].desc;
+  // const timeStampe = timeStampsV0[0].time;
   it(`click to delete timestamp: ${timeStampDesc}, setVideoBookmarks called without desc: ${timeStampDesc} `, () => {
     const mockSetState = jest.fn();
     setup(mockProps(mockSetState));
@@ -84,7 +96,24 @@ describe('VideoList', () => {
     const deleteIcons = screen.getAllByRole('img', { name: /delete/i });
     fireEvent.click(deleteIcons[0]);
 
+    expect.assertions(2);
+
+    // const newVideoBookmarks = getNewVideoBookmarks(
+    //   mockProps(mockSetState).videoBookmarks,
+    //   mockProps(mockSetState).videoId,
+    //   timeStampe
+    // );
+    // expect(mockSetState).toHaveBeenCalledWith(newVideoBookmarks);
+    // expect(storeVideoBookmarks).toHaveBeenCalledWith(
+    //   key_ytbookmark,
+    //   newVideoBookmarks
+    // );
+
     expect(mockSetState).not.toHaveBeenCalledWith(
+      expect.arrayContaining([expect.objectContaining({ desc: timeStampDesc })])
+    );
+    expect(storeVideoBookmarks).not.toHaveBeenCalledWith(
+      key_ytbookmark,
       expect.arrayContaining([expect.objectContaining({ desc: timeStampDesc })])
     );
   });
@@ -108,15 +137,39 @@ describe('VideoList', () => {
   });
 
   const videoId = videoIds[0];
-  it(`click to delete icon, setVideoBookmarks called with videoId: ${videoId} `, () => {
+  it(`click to delete icon of the video (id: ${videoId}), then storeVideoBookmarks and setVideoBookmarks called with new videoBookmarks`, () => {
     const mockSetState = jest.fn();
     setup(mockProps(mockSetState));
 
     const deleteIcons = screen.getAllByRole('img', { name: /delete/i });
     fireEvent.click(deleteIcons[0]);
 
-    expect(mockSetState).not.toHaveBeenCalledWith(
-      expect.arrayContaining([expect.objectContaining({ id: videoId })])
+    const newVideoBookmarks = mockProps(mockSetState).videoBookmarks.filter(
+      ({ id }) => id !== videoId
     );
+
+    expect.assertions(2);
+    expect(mockSetState).toHaveBeenCalledWith(newVideoBookmarks);
+    expect(storeVideoBookmarks).toHaveBeenCalledWith(
+      key_ytbookmark,
+      newVideoBookmarks
+    );
+    // expect(mockSetState).not.toHaveBeenCalledWith(
+    //   expect.arrayContaining([expect.objectContaining({ id: videoId })])
+    // );
   });
 });
+
+const getNewVideoBookmarks = (
+  videoBookmarks: VideoBookmark[],
+  videoId: string,
+  t: number
+) => {
+  return videoBookmarks.map((bookmark) => {
+    if (bookmark.id === videoId) {
+      const newTimestamp = bookmark.timestamp.filter(({ time }) => time !== t);
+      return { ...bookmark, timestamp: newTimestamp };
+    }
+    return bookmark;
+  });
+};

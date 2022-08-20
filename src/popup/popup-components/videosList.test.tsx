@@ -8,8 +8,17 @@ import {
   videoIds,
   videoTitles,
 } from '../../assets/mockData';
+import { storeVideoBookmarks } from '../../chrome-api/storage/bookmarks';
+import { key_ytbookmark } from '../../assets';
 
-jest.mock('../../chrome-api/sendMessage');
+jest.mock('../../chrome-api/storage/bookmarks', () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return {
+    __esModule: true,
+    ...jest.requireActual('../../chrome-api/storage/bookmarks'),
+    storeVideoBookmarks: jest.fn(() => Promise.resolve()),
+  };
+});
 
 const setup = (props: VideosListProps) => {
   render(<VideosList {...props} />);
@@ -52,7 +61,7 @@ describe('VideoList', () => {
       ${videoIds[1]}
       ${videoIds[2]}
     `(
-      'click icon to delete video $videoId, then setVideoBookmarks called without $videoId',
+      'click icon to delete video $videoId, then storeVideoBookmarks and setVideoBookmarks called with new videobookmarks',
       ({ videoId }) => {
         const mockSetState = jest.fn();
         setup(mockProps(mockSetState));
@@ -60,16 +69,26 @@ describe('VideoList', () => {
         const deleteIcon = screen.getAllByRole('img', { name: /delete/i })[
           index
         ];
-        index++;
         fireEvent.click(deleteIcon);
 
-        expect(mockSetState).not.toHaveBeenCalledWith(
-          expect.arrayContaining([
-            expect.objectContaining({
-              id: videoId as string,
-            }),
-          ])
+        const newVideoBookmarks = mockProps(mockSetState).videoBookmarks.filter(
+          ({ id }) => id !== videoId
         );
+        expect.assertions(2);
+        expect(storeVideoBookmarks).toHaveBeenCalledWith(
+          key_ytbookmark,
+          newVideoBookmarks
+        );
+        expect(mockSetState).toHaveBeenCalledWith(newVideoBookmarks);
+        // expect(mockSetState).not.toHaveBeenCalledWith(
+        //   expect.arrayContaining([
+        //     expect.objectContaining({
+        //       id: videoId as string,
+        //     }),
+        //   ])
+        // );
+
+        index++;
       }
     );
   });

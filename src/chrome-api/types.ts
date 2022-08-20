@@ -3,7 +3,7 @@ export type VideoBookmark = {
   url: string;
   title: string;
   createdAt: string;
-  timestamp: {
+  timestamps: {
     time: number;
     desc: string;
   }[];

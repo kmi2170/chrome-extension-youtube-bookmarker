@@ -4,7 +4,7 @@ export const fetchOptions = (key: string): Promise<boolean> => {
       chrome.runtime.lastError
         ? reject(Error(chrome.runtime.lastError.message))
         : resolve(
-            obj[key] ? (obj[key] as { isAllPages: boolean }).isAllPages : false
+            obj[key] ? (obj[key] as { isAllPages: boolean }).isAllPages : true
           );
     });
   });

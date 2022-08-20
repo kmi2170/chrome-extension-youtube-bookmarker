@@ -1,12 +1,14 @@
 import { getTime, removeCharsFromString } from '../utils';
 import { VideoBookmark } from '../chrome-api/types';
-import {
-  deleteVideoHandler,
-  deleteTimestampHandler,
-} from './contentScript-utils';
+// import {
+//   deleteVideoHandler,
+//   deleteTimestampHandler,
+// } from './utils';
 import {
   storeVideoBookmarks,
   fetchBookmarks,
+  showStorage,
+  clearStorage,
 } from '../chrome-api/storage/bookmarks';
 
 (() => {
@@ -32,13 +34,13 @@ import {
     if (isCurrentVideoExists) {
       newVideoBookmarks = currentVideoBookmarks.map((bookmark) => {
         if (bookmark.id === currentVideoId) {
-          const isTimestampExists =
-            bookmark.timestamp.filter(({ time }) => time == currentTime)
+          const isTimestampsExists =
+            bookmark.timestamps.filter(({ time }) => time == currentTime)
               .length > 0;
-          if (isTimestampExists) return bookmark;
+          if (isTimestampsExists) return bookmark;
 
-          const newTimestamp = [
-            ...bookmark.timestamp,
+          const newTimestamps = [
+            ...bookmark.timestamps,
             {
               time: currentTime,
               desc: 'Bookmark at ' + getTime(currentTime),
@@ -47,7 +49,7 @@ import {
 
           return {
             ...bookmark,
-            timestamp: newTimestamp.sort((a, b) => a.time - b.time),
+            timestamp: newTimestamps.sort((a, b) => a.time - b.time),
           };
         }
 
@@ -59,7 +61,7 @@ import {
         title: removeCharsFromString(currentVideoTitle, '- YouTube'),
         url: currentVideoUrl,
         createdAt: new Date().toISOString(),
-        timestamp: [
+        timestamps: [
           {
             time: currentTime,
             desc: 'Bookmark at ' + getTime(currentTime),
@@ -77,10 +79,10 @@ import {
   };
 
   const newVideoLoaded = () => {
-    fetchBookmarks(key_ytbookmark)
-      .then((data) => (currentVideoBookmarks = data))
-      .catch((error) => console.error(error));
-    console.log('fetch curretVideoBookmarks', currentVideoBookmarks);
+    // fetchBookmarks(key_ytbookmark)
+    //   .then((data) => (currentVideoBookmarks = data))
+    //   .catch((error) => console.error(error));
+    // console.log('fetch curretVideoBookmarks', currentVideoBookmarks);
 
     const bookmarkBtnExists =
       document.getElementsByClassName('bookmark-btn')[0];
@@ -122,27 +124,29 @@ import {
       currentVideoUrl = videoUrl;
     } else if (type === 'PLAY') {
       youtubePlayer.currentTime = value as number;
-    } else if (type === 'DELETE_TIMESTAMP') {
-      currentVideoBookmarks = deleteTimestampHandler(
-        value as number,
-        currentVideoId,
-        currentVideoBookmarks
-      );
-      storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks).catch(
-        (error) => console.error(error)
-      );
-      response(currentVideoBookmarks);
-    } else if (type === 'DELETE_VIDEO') {
-      currentVideoBookmarks = deleteVideoHandler(
-        value as string,
-        currentVideoBookmarks
-      );
-      storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks).catch(
-        (error) => console.error(error)
-      );
-      response(currentVideoBookmarks);
+      // } else if (type === 'DELETE_TIMESTAMP') {
+      //   currentVideoBookmarks = deleteTimestampHandler(
+      //     value as number,
+      //     currentVideoId,
+      //     currentVideoBookmarks
+      //   );
+      //   storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks).catch(
+      //     (error) => console.error(error)
+      //   );
+      //   response(currentVideoBookmarks);
+      // } else if (type === 'DELETE_VIDEO') {
+      //   currentVideoBookmarks = deleteVideoHandler(
+      //     value as string,
+      //     currentVideoBookmarks
+      //   );
+      //   storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks).catch(
+      //     (error) => console.error(error)
+      //   );
+      //   response(currentVideoBookmarks);
     }
   });
 
+  // clearStorage();
   newVideoLoaded();
+  showStorage();
 })();

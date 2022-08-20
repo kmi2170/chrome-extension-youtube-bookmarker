@@ -20,13 +20,11 @@ const Timestamps = ({
   videoId,
   setVideoBookmarks,
 }: TimestampsProps) => {
-  const videoBookmark = videoBookmarks.filter((bookmark) => {
-    if (bookmark.id === videoId) {
-      return bookmark;
-    }
-  });
+  const videoBookmark = videoBookmarks.filter(
+    (bookmark) => bookmark.id === videoId
+  );
 
-  const timeStamps = videoBookmark[0]?.timestamp;
+  const timeStamps = videoBookmark[0]?.timestamps;
 
   const handlePlay = (t: number) => {
     sendMessage(tabId as number, 'PLAY', t);
@@ -35,13 +33,14 @@ const Timestamps = ({
   const handleDelete = (t: number) => {
     const newVideoBookmarks = videoBookmarks.map((bookmark) => {
       if (bookmark.id === videoId) {
-        const newTimestamp = bookmark.timestamp.filter(
+        const newTimestamps = bookmark.timestamps.filter(
           ({ time }) => time !== t
         );
-        return { ...bookmark, timestamp: newTimestamp };
+        return { ...bookmark, timestamp: newTimestamps };
       }
       return bookmark;
     });
+
     // sendMessage(tabId as number, 'DELETE_TIMESTAMP', t);
     storeVideoBookmarks(key_ytbookmark, newVideoBookmarks).catch((error) =>
       console.error(error)
