@@ -1,6 +1,6 @@
 import React from 'react';
 import { VideoBookmark } from '../../chrome-api/types';
-import VideoItem from './popup-parts/videoItem';
+import VideoItem from './parts/videoItem';
 
 export type VideosListProps = {
   tabId: number;
@@ -10,7 +10,7 @@ export type VideosListProps = {
 };
 
 const VideosList = ({
-  tabId,
+  // tabId,
   videoBookmarks,
   setVideoBookmarks,
   excludeVideoId,

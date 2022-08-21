@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import useChromeApi from '../chrome-api/hook';
-import NotYoutubePage from './popup-components/notYoutube';
-import CurrentVideo from './popup-components/currentVideo';
-import VideosList from './popup-components/videosList';
+import NotYoutubePage from './components/notYoutube';
+import CurrentVideo from './components/currentVideo';
+import VideosList from './components/videosList';
 import './popup.css';
 import { fetchOptions } from '../chrome-api/storage/options';
 

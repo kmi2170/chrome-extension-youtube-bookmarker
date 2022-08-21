@@ -69,7 +69,7 @@ module.exports = {
     popup: resolve('./src/popup/index.tsx'),
     options: resolve('./src/options/index.tsx'),
     background: resolve('./src/background/background.ts'),
-    contentScript: resolve('./src/contentScript/contentScript.ts'),
+    contentScript: resolve('./src/content-script/contentScript.ts'),
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],

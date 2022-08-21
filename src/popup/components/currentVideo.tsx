@@ -1,7 +1,7 @@
 import React from 'react';
 import { VideoBookmark } from '../../chrome-api/types';
-import Timestamps from './popup-parts/timeStamps';
-import VideoItem from './popup-parts/videoItem';
+import Timestamps from './parts/timeStamps';
+import VideoItem from './parts/videoItem';
 
 export type CurrentVideoProps = {
   tabId: number;
