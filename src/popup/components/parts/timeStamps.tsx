@@ -36,7 +36,7 @@ const Timestamps = ({
         const newTimestamps = bookmark.timestamps.filter(
           ({ time }) => time !== t
         );
-        return { ...bookmark, timestamp: newTimestamps };
+        return { ...bookmark, timestamps: newTimestamps };
       }
       return bookmark;
     });
