@@ -1,14 +1,8 @@
 import { getTime, removeCharsFromString } from '../utils';
 import { VideoBookmark } from '../chrome-api/types';
-// import {
-//   deleteVideoHandler,
-//   deleteTimestampHandler,
-// } from './utils';
 import {
   storeVideoBookmarks,
   fetchBookmarks,
-  showStorage,
-  clearStorage,
 } from '../chrome-api/storage/bookmarks';
 
 (() => {
@@ -20,70 +14,73 @@ import {
   let currentVideoUrl = '';
   let currentVideoBookmarks: VideoBookmark[] | [] = [];
 
+  // use IIFE to avoid @typescript-eslint/no-misused-promises rule
   const addNewBookmarkEventHandler = () => {
-    fetchBookmarks(key_ytbookmark)
-      .then((data) => (currentVideoBookmarks = data))
-      .catch((error) => console.error(error));
+    (async () => {
+      console.log('click');
 
-    const currentTime = Math.round(youtubePlayer.currentTime);
-    const isCurrentVideoExists =
-      currentVideoBookmarks.filter((bookmark) => bookmark.id == currentVideoId)
-        .length > 0;
+      currentVideoBookmarks = await fetchBookmarks(key_ytbookmark);
+      console.log(currentVideoBookmarks);
 
-    let newVideoBookmarks = [];
-    if (isCurrentVideoExists) {
-      newVideoBookmarks = currentVideoBookmarks.map((bookmark) => {
-        if (bookmark.id === currentVideoId) {
-          const isTimestampsExists =
-            bookmark.timestamps.filter(({ time }) => time == currentTime)
-              .length > 0;
-          if (isTimestampsExists) return bookmark;
+      const currentTime = Math.round(youtubePlayer.currentTime);
+      const isCurrentVideoExists =
+        currentVideoBookmarks.filter(
+          (bookmark) => bookmark.id == currentVideoId
+        ).length > 0;
 
-          const newTimestamps = [
-            ...bookmark.timestamps,
+      let newVideoBookmarks = [];
+      console.log(isCurrentVideoExists);
+
+      if (isCurrentVideoExists) {
+        newVideoBookmarks = currentVideoBookmarks.map((bookmark) => {
+          if (bookmark.id === currentVideoId) {
+            const isTimestampsExists =
+              bookmark.timestamps.filter(({ time }) => time == currentTime)
+                .length > 0;
+            if (isTimestampsExists) return bookmark;
+
+            const newTimestamps = [
+              ...bookmark.timestamps,
+              {
+                time: currentTime,
+                desc: 'Bookmark at ' + getTime(currentTime),
+              },
+            ];
+            console.log(bookmark.timestamps, newTimestamps);
+
+            return {
+              ...bookmark,
+              timestamp: newTimestamps.sort((a, b) => a.time - b.time),
+            };
+          }
+
+          return bookmark;
+        });
+      } else {
+        const newVideoBookmark: VideoBookmark = {
+          id: currentVideoId,
+          title: removeCharsFromString(currentVideoTitle, '- YouTube'),
+          url: currentVideoUrl,
+          createdAt: new Date().toISOString(),
+          timestamps: [
             {
               time: currentTime,
               desc: 'Bookmark at ' + getTime(currentTime),
             },
-          ];
+          ],
+        };
 
-          return {
-            ...bookmark,
-            timestamp: newTimestamps.sort((a, b) => a.time - b.time),
-          };
-        }
+        newVideoBookmarks = [...currentVideoBookmarks, newVideoBookmark];
+      }
 
-        return bookmark;
-      });
-    } else {
-      const newBookmark: VideoBookmark = {
-        id: currentVideoId,
-        title: removeCharsFromString(currentVideoTitle, '- YouTube'),
-        url: currentVideoUrl,
-        createdAt: new Date().toISOString(),
-        timestamps: [
-          {
-            time: currentTime,
-            desc: 'Bookmark at ' + getTime(currentTime),
-          },
-        ],
-      };
-
-      newVideoBookmarks = [...currentVideoBookmarks, newBookmark];
-    }
-
-    storeVideoBookmarks(
-      key_ytbookmark,
-      newVideoBookmarks.sort((a, b) => +a.createdAt - +b.createdAt)
-    ).catch((error) => console.error(error));
+      await storeVideoBookmarks(
+        key_ytbookmark,
+        newVideoBookmarks.sort((a, b) => +a.createdAt - +b.createdAt)
+      );
+    })().catch((error) => console.error(error));
   };
 
   const newVideoLoaded = () => {
-    // fetchBookmarks(key_ytbookmark)
-    //   .then((data) => (currentVideoBookmarks = data))
-    //   .catch((error) => console.error(error));
-    // console.log('fetch curretVideoBookmarks', currentVideoBookmarks);
-
     const bookmarkBtnExists =
       document.getElementsByClassName('bookmark-btn')[0];
     if (!bookmarkBtnExists) {
@@ -115,6 +112,7 @@ import {
     videoUrl: string;
   };
 
+  // chrome.runtime.onMessage.addListener((obj) => {
   chrome.runtime.onMessage.addListener((obj, sender, response) => {
     const { type, value, videoId, videoTitle, videoUrl } = obj as MessageObj;
 
@@ -124,29 +122,8 @@ import {
       currentVideoUrl = videoUrl;
     } else if (type === 'PLAY') {
       youtubePlayer.currentTime = value as number;
-      // } else if (type === 'DELETE_TIMESTAMP') {
-      //   currentVideoBookmarks = deleteTimestampHandler(
-      //     value as number,
-      //     currentVideoId,
-      //     currentVideoBookmarks
-      //   );
-      //   storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks).catch(
-      //     (error) => console.error(error)
-      //   );
-      //   response(currentVideoBookmarks);
-      // } else if (type === 'DELETE_VIDEO') {
-      //   currentVideoBookmarks = deleteVideoHandler(
-      //     value as string,
-      //     currentVideoBookmarks
-      //   );
-      //   storeVideoBookmarks(key_ytbookmark, currentVideoBookmarks).catch(
-      //     (error) => console.error(error)
-      //   );
-      //   response(currentVideoBookmarks);
     }
   });
 
-  // clearStorage();
   newVideoLoaded();
-  showStorage();
 })();

@@ -17,13 +17,10 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
       videoTitle,
       videoUrl,
     };
-  } else {
-    obj = {
-      type: 'ALL_PAGES',
-    };
-  }
 
-  chrome.tabs.sendMessage(tabId, obj, () =>
-    console.log('send Message', tabId, obj)
-  );
+    // chrome.tabs.sendMessage(tabId, obj);
+    chrome.tabs.sendMessage(tabId, obj, () =>
+      console.log('send Message', tabId, obj)
+    );
+  }
 });
