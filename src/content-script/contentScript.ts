@@ -3,41 +3,40 @@ import { VideoBookmark } from '../chrome-api/types';
 import {
   storeVideoBookmarks,
   fetchBookmarks,
+  showStorage,
+  clearStorage,
 } from '../chrome-api/storage/bookmarks';
+import { key_ytbookmark } from '../assets';
 
 (() => {
-  const key_ytbookmark = 'yt-bookmarks';
-
-  let youtubeLeftControls: Element, youtubePlayer: HTMLVideoElement;
+  let youtubeLeftControls: Element;
+  let youtubePlayer: HTMLVideoElement;
   let currentVideoId = '';
   let currentVideoTitle = '';
   let currentVideoUrl = '';
-  let currentVideoBookmarks: VideoBookmark[] | [] = [];
 
-  // use IIFE to avoid @typescript-eslint/no-misused-promises rule
   const addNewBookmarkEventHandler = () => {
+    // use IIFE to avoid @typescript-eslint/no-misused-promises rule
     (async () => {
-      console.log('click');
-
-      currentVideoBookmarks = await fetchBookmarks(key_ytbookmark);
-      console.log(currentVideoBookmarks);
+      const currentVideoBookmarks: VideoBookmark[] = await fetchBookmarks(
+        key_ytbookmark
+      );
+      console.log('fetch bookmarks', currentVideoBookmarks);
 
       const currentTime = Math.round(youtubePlayer.currentTime);
       const isCurrentVideoExists =
         currentVideoBookmarks.filter(
-          (bookmark) => bookmark.id == currentVideoId
+          (bookmark) => bookmark.id === currentVideoId
         ).length > 0;
 
-      let newVideoBookmarks = [];
-      console.log(isCurrentVideoExists);
-
+      let newVideoBookmarks: VideoBookmark[] = [];
       if (isCurrentVideoExists) {
         newVideoBookmarks = currentVideoBookmarks.map((bookmark) => {
           if (bookmark.id === currentVideoId) {
-            const isTimestampsExists =
-              bookmark.timestamps.filter(({ time }) => time == currentTime)
+            const isTimestampExists =
+              bookmark.timestamps.filter(({ time }) => time === currentTime)
                 .length > 0;
-            if (isTimestampsExists) return bookmark;
+            if (isTimestampExists) return bookmark;
 
             const newTimestamps = [
               ...bookmark.timestamps,
@@ -46,11 +45,16 @@ import {
                 desc: 'Bookmark at ' + getTime(currentTime),
               },
             ];
-            console.log(bookmark.timestamps, newTimestamps);
+            // console.log(bookmark.timestamps, newTimestamps);
+            console.log('current bookmarks 1', currentVideoBookmarks[0]);
+            console.log(
+              'current bookmarks 1 timestamps',
+              currentVideoBookmarks[0].timestamps
+            );
 
             return {
               ...bookmark,
-              timestamp: newTimestamps.sort((a, b) => a.time - b.time),
+              timestamps: newTimestamps.sort((a, b) => a.time - b.time),
             };
           }
 
@@ -72,6 +76,7 @@ import {
 
         newVideoBookmarks = [...currentVideoBookmarks, newVideoBookmark];
       }
+      // console.log('store bookmarks', newVideoBookmarks);
 
       await storeVideoBookmarks(
         key_ytbookmark,
@@ -83,6 +88,7 @@ import {
   const newVideoLoaded = () => {
     const bookmarkBtnExists =
       document.getElementsByClassName('bookmark-btn')[0];
+
     if (!bookmarkBtnExists) {
       const bookmarkBtn = document.createElement('img');
       bookmarkBtn.title = 'Click to save current timestamp';
@@ -120,10 +126,12 @@ import {
       currentVideoId = videoId;
       currentVideoTitle = videoTitle;
       currentVideoUrl = videoUrl;
+
+      newVideoLoaded();
     } else if (type === 'PLAY') {
       youtubePlayer.currentTime = value as number;
     }
   });
 
-  newVideoLoaded();
+  // clearStorage();
 })();
