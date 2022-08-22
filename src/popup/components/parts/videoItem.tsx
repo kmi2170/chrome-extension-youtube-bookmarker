@@ -8,7 +8,6 @@ import { VideoBookmark } from '../../../chrome-api/types';
 const key_ytbookmark = 'yt-bookmarks';
 
 export type VideoItemProps = {
-  // tabId: number;
   currentVideo?: boolean;
   excludeVideoId?: string;
   videoId: string;
@@ -19,7 +18,6 @@ export type VideoItemProps = {
 };
 
 const VideoItem = ({
-  // tabId,
   currentVideo,
   excludeVideoId = undefined,
   videoId,
@@ -34,7 +32,6 @@ const VideoItem = ({
       console.error(error)
     );
 
-    // sendMessage(tabId, 'DELETE_VIDEO', vId);
     setVideoBookmarks(newVideoBookmarks);
   };
 

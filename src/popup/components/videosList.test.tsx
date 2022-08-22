@@ -8,14 +8,16 @@ import {
   videoIds,
   videoTitles,
 } from '../../assets/mockData';
-import { storeVideoBookmarks } from '../../chrome-api/storage/bookmarks';
 import { key_ytbookmark } from '../../assets';
+import { storeVideoBookmarks } from '../../chrome-api/storage/bookmarks';
+import type * as Bookmarks from '../../chrome-api/storage/bookmarks';
 
 jest.mock('../../chrome-api/storage/bookmarks', () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     __esModule: true,
-    ...jest.requireActual('../../chrome-api/storage/bookmarks'),
+    ...jest.requireActual<typeof Bookmarks>(
+      '../../chrome-api/storage/bookmarks'
+    ),
     storeVideoBookmarks: jest.fn(() => Promise.resolve()),
   };
 });
@@ -26,7 +28,6 @@ const setup = (props: VideosListProps) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockProps = (mockFn: jest.Mock<any, any>) => ({
-  tabId: 1,
   excludeVideoId: undefined,
   videoBookmarks: mockVideoBookmarks,
   setVideoBookmarks: mockFn,
@@ -80,13 +81,6 @@ describe('VideoList', () => {
           newVideoBookmarks
         );
         expect(mockSetState).toHaveBeenCalledWith(newVideoBookmarks);
-        // expect(mockSetState).not.toHaveBeenCalledWith(
-        //   expect.arrayContaining([
-        //     expect.objectContaining({
-        //       id: videoId as string,
-        //     }),
-        //   ])
-        // );
 
         index++;
       }

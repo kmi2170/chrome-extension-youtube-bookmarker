@@ -3,14 +3,12 @@ import { VideoBookmark } from '../../chrome-api/types';
 import VideoItem from './parts/videoItem';
 
 export type VideosListProps = {
-  tabId: number;
   videoBookmarks: VideoBookmark[];
   setVideoBookmarks: React.Dispatch<React.SetStateAction<VideoBookmark[]>>;
   excludeVideoId: string | undefined;
 };
 
 const VideosList = ({
-  // tabId,
   videoBookmarks,
   setVideoBookmarks,
   excludeVideoId,
@@ -30,7 +28,6 @@ const VideosList = ({
         videoBookmarks.map(({ id, title, url }) => (
           <VideoItem
             key={id}
-            // tabId={tabId}
             videoId={id}
             videoTitle={title}
             videoUrl={url}

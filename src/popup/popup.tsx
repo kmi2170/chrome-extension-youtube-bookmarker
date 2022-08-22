@@ -58,7 +58,6 @@ const Popup = () => {
       )}
 
       <VideosList
-        tabId={activeTabId as number}
         videoBookmarks={currentVideoBookmarks}
         setVideoBookmarks={setCurrentVideoBookmarks}
         excludeVideoId={isYoutubePage ? (currentVideoId as string) : undefined}

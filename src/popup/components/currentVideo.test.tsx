@@ -10,23 +10,25 @@ import {
   timeStampsV0,
 } from '../../assets/mockData';
 import { sendMessage } from '../../chrome-api/sendMessage';
+import type * as SendMessage from '../../chrome-api/sendMessage';
 import { storeVideoBookmarks } from '../../chrome-api/storage/bookmarks';
-import { VideoBookmark } from '../../chrome-api/types';
+import type * as Bookmarks from '../../chrome-api/storage/bookmarks';
 import { key_ytbookmark } from '../../assets';
+// import { VideoBookmark } from '../../chrome-api/types';
 
 jest.mock('../../chrome-api/sendMessage', () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     __esModule: true,
-    ...jest.requireActual('../../chrome-api/sendMessage'),
+    ...jest.requireActual<typeof SendMessage>('../../chrome-api/sendMessage'),
     sendMessage: jest.fn(),
   };
 });
 jest.mock('../../chrome-api/storage/bookmarks', () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     __esModule: true,
-    ...jest.requireActual('../../chrome-api/storage/bookmarks'),
+    ...jest.requireActual<typeof Bookmarks>(
+      '../../chrome-api/storage/bookmarks'
+    ),
     storeVideoBookmarks: jest.fn(() => Promise.resolve()),
   };
 });
@@ -88,7 +90,7 @@ describe('VideoList', () => {
   });
 
   const timeStampDesc = timeStampsV0[0].desc;
-  // const timeStampe = timeStampsV0[0].time;
+  // const timeStamp = timeStampsV0[0].time;
   it(`click to delete timestamp: ${timeStampDesc}, setVideoBookmarks called without desc: ${timeStampDesc} `, () => {
     const mockSetState = jest.fn();
     setup(mockProps(mockSetState));
@@ -96,13 +98,12 @@ describe('VideoList', () => {
     const deleteIcons = screen.getAllByRole('img', { name: /delete/i });
     fireEvent.click(deleteIcons[0]);
 
-    expect.assertions(2);
-
-    // const newVideoBookmarks = getNewVideoBookmarks(
+    // const newVideoBookmarks = getVideoBookmarksWithNewTimestamps(
     //   mockProps(mockSetState).videoBookmarks,
     //   mockProps(mockSetState).videoId,
-    //   timeStampe
+    //   timeStamp
     // );
+    // expect.assertions(2);
     // expect(mockSetState).toHaveBeenCalledWith(newVideoBookmarks);
     // expect(storeVideoBookmarks).toHaveBeenCalledWith(
     //   key_ytbookmark,
@@ -154,22 +155,21 @@ describe('VideoList', () => {
       key_ytbookmark,
       newVideoBookmarks
     );
-    // expect(mockSetState).not.toHaveBeenCalledWith(
-    //   expect.arrayContaining([expect.objectContaining({ id: videoId })])
-    // );
   });
 });
 
-const getNewVideoBookmarks = (
-  videoBookmarks: VideoBookmark[],
-  videoId: string,
-  t: number
-) => {
-  return videoBookmarks.map((bookmark) => {
-    if (bookmark.id === videoId) {
-      const newTimestamp = bookmark.timestamp.filter(({ time }) => time !== t);
-      return { ...bookmark, timestamp: newTimestamp };
-    }
-    return bookmark;
-  });
-};
+// const getVideoBookmarksWithNewTimestamps = (
+//   videoBookmarks: VideoBookmark[],
+//   videoId: string,
+//   t: number
+// ) => {
+//   return videoBookmarks.map((bookmark) => {
+//     if (bookmark.id === videoId) {
+//       const newTimestamps = bookmark.timestamps.filter(
+//         ({ time }) => time !== t
+//       );
+//       return { ...bookmark, timestamps: newTimestamps };
+//     }
+//     return bookmark;
+//   });
+// };

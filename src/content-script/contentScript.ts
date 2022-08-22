@@ -3,8 +3,6 @@ import { VideoBookmark } from '../chrome-api/types';
 import {
   storeVideoBookmarks,
   fetchBookmarks,
-  showStorage,
-  clearStorage,
 } from '../chrome-api/storage/bookmarks';
 import { key_ytbookmark } from '../assets';
 
@@ -21,7 +19,6 @@ import { key_ytbookmark } from '../assets';
       const currentVideoBookmarks: VideoBookmark[] = await fetchBookmarks(
         key_ytbookmark
       );
-      console.log('fetch bookmarks', currentVideoBookmarks);
 
       const currentTime = Math.round(youtubePlayer.currentTime);
       const isCurrentVideoExists =
@@ -45,12 +42,6 @@ import { key_ytbookmark } from '../assets';
                 desc: 'Bookmark at ' + getTime(currentTime),
               },
             ];
-            // console.log(bookmark.timestamps, newTimestamps);
-            console.log('current bookmarks 1', currentVideoBookmarks[0]);
-            console.log(
-              'current bookmarks 1 timestamps',
-              currentVideoBookmarks[0].timestamps
-            );
 
             return {
               ...bookmark,
@@ -76,7 +67,6 @@ import { key_ytbookmark } from '../assets';
 
         newVideoBookmarks = [...currentVideoBookmarks, newVideoBookmark];
       }
-      // console.log('store bookmarks', newVideoBookmarks);
 
       await storeVideoBookmarks(
         key_ytbookmark,
@@ -118,8 +108,8 @@ import { key_ytbookmark } from '../assets';
     videoUrl: string;
   };
 
-  // chrome.runtime.onMessage.addListener((obj) => {
-  chrome.runtime.onMessage.addListener((obj, sender, response) => {
+  chrome.runtime.onMessage.addListener((obj) => {
+    // chrome.runtime.onMessage.addListener((obj, sender, response) => {
     const { type, value, videoId, videoTitle, videoUrl } = obj as MessageObj;
 
     if (type === 'NEW') {
@@ -132,6 +122,4 @@ import { key_ytbookmark } from '../assets';
       youtubePlayer.currentTime = value as number;
     }
   });
-
-  // clearStorage();
 })();

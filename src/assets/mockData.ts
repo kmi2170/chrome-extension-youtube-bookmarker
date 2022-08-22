@@ -3,7 +3,7 @@ export const mockVideoBookmarks = [
     id: 'id0001',
     title: 'first video title',
     createdAt: '2022-07-23T04:02:16.413Z',
-    timestamp: [
+    timestamps: [
       { time: 3, desc: 'Bookmark at 00:00:03' },
       { time: 1176, desc: 'Bookmark at 00:19:36' },
       { time: 1917, desc: 'Bookmark at 00:31:57' },
@@ -14,14 +14,14 @@ export const mockVideoBookmarks = [
     id: 'id0002',
     title: 'second video title',
     createdAt: '2022-07-23T04:02:54.179Z',
-    timestamp: [],
+    timestamps: [],
     url: 'https://www.youtube.com/watch?v=testvideo2',
   },
   {
     id: 'id0003',
     title: 'third video title',
     createdAt: '2022-07-24T01:23:39.243Z',
-    timestamp: [],
+    timestamps: [],
     url: 'https://www.youtube.com/watch?v=testvideo3',
   },
 ];
@@ -38,4 +38,4 @@ export const videoTitles = [
   mockVideoBookmarks[2].title,
 ];
 
-export const timeStampsV0 = [...mockVideoBookmarks[0].timestamp];
+export const timeStampsV0 = mockVideoBookmarks[0].timestamps;
