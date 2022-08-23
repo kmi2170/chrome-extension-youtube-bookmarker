@@ -14,17 +14,21 @@ import { key_ytbookmark } from '../assets';
   let currentVideoUrl = '';
   let bookmarkBtn: HTMLImageElement;
 
+  const changeIconSize = () => {
+    bookmarkBtn.style.scale = '80%';
+    setTimeout(() => {
+      bookmarkBtn.style.scale = '100%';
+    }, 200);
+  };
+
   const addNewBookmarkEventHandler = () => {
     // use IIFE to avoid @typescript-eslint/no-misused-promises rule
     (async () => {
-      bookmarkBtn.style.scale = '80%';
-      setTimeout(() => {
-        bookmarkBtn.style.scale = '100%';
-      }, 200);
-
       const currentVideoBookmarks: VideoBookmark[] = await fetchBookmarks(
         key_ytbookmark
       );
+
+      changeIconSize();
 
       const currentTime = Math.round(youtubePlayer.currentTime);
       const isCurrentVideoExists =
