@@ -12,10 +12,16 @@ import { key_ytbookmark } from '../assets';
   let currentVideoId = '';
   let currentVideoTitle = '';
   let currentVideoUrl = '';
+  let bookmarkBtn: HTMLImageElement;
 
   const addNewBookmarkEventHandler = () => {
     // use IIFE to avoid @typescript-eslint/no-misused-promises rule
     (async () => {
+      bookmarkBtn.style.scale = '80%';
+      setTimeout(() => {
+        bookmarkBtn.style.scale = '100%';
+      }, 200);
+
       const currentVideoBookmarks: VideoBookmark[] = await fetchBookmarks(
         key_ytbookmark
       );
@@ -80,7 +86,7 @@ import { key_ytbookmark } from '../assets';
       document.getElementsByClassName('bookmark-btn')[0];
 
     if (!bookmarkBtnExists) {
-      const bookmarkBtn = document.createElement('img');
+      bookmarkBtn = document.createElement('img');
       bookmarkBtn.title = 'Click to save current timestamp';
       bookmarkBtn.className = 'ytp-button ' + 'bookmark-btn';
       bookmarkBtn.src = chrome.runtime.getURL(
